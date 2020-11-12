@@ -1,6 +1,13 @@
-//cow
-/mob/living/simple_animal/cow
+/mob/living/simple_animal/cattle
+	var/plough = FALSE
+	var/plough_raised = TRUE		//Lets make people access the Cattle Pulled Plough menu at first to familiarize
+	var/plough_material
+	var/plough_road = FALSE
+	var/cattle_gender = null			//Nice info to have about the cattle. Will make it easier to work with
+	var/calf = FALSE  //Each gender was taking this var
+/mob/living/simple_animal/cattle/cow
 	name = "cow"
+	cattle_gender = "female"
 	desc = "Known for their milk, just don't tip them over."
 	icon_state = "cow"
 	icon_living = "cow"
@@ -20,7 +27,6 @@
 	response_harm   = "kicks"
 	attacktext = "kicked"
 	health = 50
-	var/calf = FALSE
 	var/datum/reagents/udder = null
 	var/pregnant = FALSE
 	var/birthCountdown = 0
@@ -29,8 +35,9 @@
 	herbivore = 1
 	wandersounds = list('sound/animals/cow/cow_1.ogg','sound/animals/cow/cow_2.ogg','sound/animals/cow/cow_3.ogg')
 
-/mob/living/simple_animal/bull
+/mob/living/simple_animal/cattle/bull
 	name = "bull"
+	cattle_gender = "male"
 	desc = "Good for meat."
 	icon_state = "bull"
 	icon_living = "bull"
@@ -49,33 +56,45 @@
 	response_disarm = "gently pushes aside"
 	response_harm   = "kicks"
 	attacktext = "kicked"
-	var/calf = FALSE
 	health = 65
 	mob_size = MOB_LARGE
 	herbivore = 1
 	wandersounds = list('sound/animals/cow/cow_1.ogg','sound/animals/cow/cow_2.ogg','sound/animals/cow/cow_3.ogg')
 
-/mob/living/simple_animal/cow/death()
+/mob/living/simple_animal/cattle/death()
+	..()
+	if (plough)											//Dropping items after it dies
+		if(plough_material == "iron")					//I should probably make it modular, but I'm tired
+			new/obj/item/weapon/plough/iron(src.loc)
+			plough_material = null				//Dropping two after dying without it
+		else if (plough_material == "wood")
+			new/obj/item/weapon/plough(src.loc)
+			plough_material = null
+		new/obj/item/stack/material/rope(src.loc)
+		new/obj/item/stack/material/rope(src.loc)
+		plough = FALSE
+
+/mob/living/simple_animal/cattle/cow/death()
 	if (!removed_from_list)
 		removed_from_list=TRUE
 		cow_count -= 1
 	..()
-/mob/living/simple_animal/cow/Destroy()
+/mob/living/simple_animal/cattle/cow/Destroy()
 	if (!removed_from_list)
 		removed_from_list=TRUE
 		cow_count -= 1
 	..()
-/mob/living/simple_animal/bull/death()
+/mob/living/simple_animal/cattle/bull/death()
 	if (!removed_from_list)
 		removed_from_list=TRUE
 		cow_count -= 1
 	..()
-/mob/living/simple_animal/bull/Destroy()
+/mob/living/simple_animal/cattle/bull/Destroy()
 	if (!removed_from_list)
 		removed_from_list=TRUE
 		cow_count -= 1
 	..()
-/mob/living/simple_animal/bull/New()
+/mob/living/simple_animal/cattle/bull/New()
 	cow_count += 1
 	..()
 	spawn(1)
@@ -92,7 +111,7 @@
 				icon_dead = "bull_dead"
 				mob_size = MOB_LARGE
 
-/mob/living/simple_animal/cow/New()
+/mob/living/simple_animal/cattle/cow/New()
 	cow_count += 1
 	udder = new(50)
 	udder.my_atom = src
@@ -112,7 +131,7 @@
 				icon_dead = "cow_dead"
 				mob_size = MOB_LARGE
 
-/mob/living/simple_animal/cow/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/mob/living/simple_animal/cattle/cow/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	var/obj/item/weapon/reagent_containers/glass/G = O
 	if (stat == CONSCIOUS && istype(G) && G.is_open_container())
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
@@ -123,9 +142,140 @@
 			user << "<span class = 'red'>The udder is dry. Wait a bit.</span>"
 	else
 		..()
+									// \/ port the ploughting for the whole cattle family
+/mob/living/simple_animal/cattle/attackby(obj/item/weapon/plough/O as obj, var/mob/user as mob)
+	if(calf)
+		return
+	if ((istype(O,/obj/item/weapon/plough) && !plough) && user.a_intent == I_HELP)	//makes sure that you'll bash your cow
+		if (istype(O,/obj/item/weapon/plough/iron))									//if you do something wrong
+			plough_material = "iron"
+		else
+			plough_material = "wood"
+		if(istype(user.l_hand, /obj/item/stack/material/rope/) || istype(user.r_hand, /obj/item/stack/material/rope/))
+			if( user.a_intent == I_HELP )
+				if(plough)
+					return
+				var/obj/item/stack/material/rope/NR
+				user << "You try to attach the Plough to the cattle."
+				if(istype(user.l_hand, /obj/item/stack/material/rope/))	//Check in which hand is the rope to not mess up
+					NR = user.l_hand
+					if (NR.amount < 2)
+						user << "<span class = 'warning'>You need at least a stack of 2 ropes on one of your hands in order to do this.</span>"
+						return
+				else if(istype(user.r_hand, /obj/item/stack/material/rope/))
+					NR = user.r_hand
+					if (NR.amount < 2)
+						user << "<span class = 'warning'>You need at least a stack of 2 ropes on one of your hands in order to do this.</span>"
+						return
+				if (do_after(user,35,src))
+					NR.amount -= 2
+					if (NR.amount <= 0)
+						qdel(NR)			//When dealing with stack ammount, it could stay as object with 0 ammount
+					qdel(O)
+					if(cattle_gender == "female")
+						icon_state = "cow_plough"
+					else if(cattle_gender == "male")
+						icon_state = "bull_plough"
+					plough = TRUE
+		else
+			user << "You need a rope to attach the Plough to the cattle."
+	else
+		..()						//If its not set here as new action, just assume the previous one for attackby
 
-/mob/living/simple_animal/cow/Life()
+/mob/living/simple_animal/cattle/attack_hand(var/mob/user as mob)
+	..()
+	if(calf)
+		return
+	if ( user.a_intent == I_HELP && plough )
+		var/plough_status
+		if (plough_raised)
+			plough_status = "Lower Plough"
+		else							//Interactive menu vars
+			plough_status = "Raise Plough"
+		var/road_status
+		if(plough_road)
+			road_status = "Adjust to stop making Roads"
+		else
+			road_status = "Adjust to make Roads"
+		var/choice1 = WWinput(usr, "What would you like to do with the Cow's Plough?", "Cattle Pulled Plough", "Remove", list("Remove", road_status, plough_status, "Cancel"))
+		if (choice1 == "Remove")
+			user << "You try to detach the Plough from the Cow."
+			if (do_after(user,35,src))
+				if(cattle_gender == "female")
+					icon_state = "cow"
+				else if(cattle_gender == "male")
+					icon_state = "bull"
+				plough = FALSE
+				new/obj/item/stack/material/rope(user.loc)
+				new/obj/item/stack/material/rope(user.loc)
+				if(plough_material == "iron")
+					new/obj/item/weapon/plough/iron(user.loc)
+					plough_material = null						//I hate this much of redundancy thats needed
+				else if(plough_material == "wood")
+					new/obj/item/weapon/plough(user.loc)
+					plough_material = null
+				plough_material = null
+		else if (choice1 == "Raise Plough")
+			plough_raised = TRUE
+		else if (choice1 == "Lower Plough")
+			plough_raised = FALSE
+		else if (choice1 == "Adjust to make Roads")
+			plough_road = TRUE
+		else if (choice1 == "Adjust to stop making Roads")
+			plough_road = FALSE
+		else
+			return
+
+/mob/living/simple_animal/cattle/proc/do_plough(atom/movable/O)
+	if(plough && !plough_raised)
+		var/plough_time = 48 //25% faster than the iron hand plough
+		if (plough_material == "iron")
+			plough_time /= 2 //Iron Plough is 2x faster
+		if (simplehunger >= 500 && simplehunger <= 700)
+			plough_time += plough_time * 0.25		//Hunger between 50% and 70%, receives a 25% penalty
+		else if (simplehunger >= 200 && simplehunger < 500)
+			plough_time += plough_time * 0.50		//Hunger between 20% and 50%, receives a 50% penalty
+		else if (simplehunger >= 0 && simplehunger < 200)
+			plough_time += plough_time * 0.75		//Hunger between 0% and 20%, receives a 75% penalty
+		var/mob/living/simple_animal/cattle/L = O
+		var/mob/living/L2 = L.pulledby
+		var/turf/T = get_turf(src)
+		if (istype(T, /turf/floor/dirt/flooded) && !locate(/obj/covers/roads/dirt) in get_turf(O))
+			if(do_after(L2, plough_time, src))				//ape double code to not let it build infinite roads over the other
+				if(L.stat == CONSCIOUS)		//no memes for dead cattle  working
+					if(!plough_road)							//dirt/flooded needs to be away from other dirts because it's ploughted field
+						T.ChangeTurf(/turf/floor/dirt/ploughed/flooded)	//returns a different ploughted field than the regular dirt
+					else
+						new/obj/covers/roads/dirt(O.loc)
+					simplehunger -= 65		//The hunger rates regenerates after doing brute damage, thats why it can take more than 1000 simplehunger
+					visible_message("[src] [pick("ploughs the field","runs the plough into the field","begins ploughing the field.","plows.")]")
+		else if (istype(T, /turf/floor/dirt/underground) || locate(/obj/covers/roads/dirt) in get_turf(O))
+			return										//I hate these double checks and same looking code
+		else											//But its needed unless we rework the ploughing or turf
+			if(do_after(L2, plough_time, src))
+				if(L.stat == CONSCIOUS)
+					if(!plough_road)
+						T.ChangeTurf(/turf/floor/dirt/ploughed)
+					else
+						new/obj/covers/roads/dirt(O.loc)
+					simplehunger -= 65
+					visible_message("[src] [pick("ploughs the field","runs the plough into the field","begins ploughing the field.","plows.")]")
+
+/mob/living/simple_animal/cattle/Life()
 	. = ..()
+	if (stat == CONSCIOUS)
+		if ( plough && pulledby)
+			if ( istype(get_turf(src), /turf/floor/grass/jungle) )
+			else if ( istype(get_turf(src), /turf/floor/dirt/burned) )			//Not very modular, since the plough process isnt
+			else if ( istype(get_turf(src), /turf/floor/dirt/jungledirt) )		//We can module all the checks if the soil is ploughtable
+			else if (istype(get_turf(src), /turf/floor/grass) && !istype(get_turf(src), /turf/floor/grass/jungle))
+				do_plough(src)			//Maybe add a Turf var or proc is_ploughtable?
+			else if (istype(get_turf(src), /turf/floor/dirt) && !(istype(get_turf(src), /turf/floor/dirt/ploughed)) && !(istype(get_turf(src), /turf/floor/dirt/dust)))
+				do_plough(src)
+
+/mob/living/simple_animal/cattle/cow/Life()
+	. = ..()
+
 	if (stat == CONSCIOUS)
 		if (udder && prob(5) && !calf)
 			udder.add_reagent("milk", rand(5, 10))
@@ -138,7 +288,7 @@
 
 	if (!pregnant && cow_count < 30)
 		var/nearbyObjects = range(1,src) //3x3 area around cow
-		for(var/mob/living/simple_animal/bull/M in nearbyObjects)
+		for(var/mob/living/simple_animal/cattle/bull/M in nearbyObjects)
 			if (M.stat == CONSCIOUS)
 				pregnant = TRUE
 				birthCountdown = 600
@@ -148,11 +298,11 @@
 			nearbyObjects = range(7,src) //15x15 area around cow
 
 			var/cowCount = 0
-			for(var/mob/living/simple_animal/cow/M in nearbyObjects)
+			for(var/mob/living/simple_animal/cattle/cow/M in nearbyObjects)
 				if (M.stat == CONSCIOUS)
 					cowCount++
 
-			for(var/mob/living/simple_animal/bull/M in nearbyObjects)
+			for(var/mob/living/simple_animal/cattle/bull/M in nearbyObjects)
 				if (M.stat == CONSCIOUS)
 					cowCount++
 
@@ -164,21 +314,24 @@
 		if (birthCountdown <= 0)
 			pregnant = FALSE
 			if (prob(50))
-				var/mob/living/simple_animal/cow/C = new/mob/living/simple_animal/cow(loc)
+				var/mob/living/simple_animal/cattle/cow/C = new/mob/living/simple_animal/cattle/cow(loc)
 				C.calf = TRUE
 			else
-				var/mob/living/simple_animal/bull/B = new/mob/living/simple_animal/bull(loc)
+				var/mob/living/simple_animal/cattle/bull/B = new/mob/living/simple_animal/cattle/bull(loc)
 				B.calf = TRUE
 			visible_message("A calf has been born!")
 
-/mob/living/simple_animal/cow/attack_hand(mob/living/human/M as mob)
+/mob/living/simple_animal/cattle/cow/attack_hand(mob/living/human/M as mob)
 	if (!stat && M.a_intent == I_DISARM && icon_state != icon_dead)
 		M.visible_message("<span class='warning'>[M] tips over [src].</span>","<span class='notice'>You tip over [src].</span>")
 		Weaken(30)
 		icon_state = icon_dead
 		spawn(rand(20,50))
 			if (!stat && M)
-				icon_state = icon_living
+				if ( plough )
+					icon_state = "cow_plough"
+				else								//For some reason, updating the cow_work to icon_living doesnt work properly
+					icon_state = icon_living
 				var/list/responses = list(	"[src] looks at you imploringly.",
 											"[src] looks at you pleadingly",
 											"[src] looks at you with a resigned expression.",
