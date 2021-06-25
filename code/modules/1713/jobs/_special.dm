@@ -27,6 +27,8 @@
 /datum/job/var/is_gladiator = FALSE
 /datum/job/var/is_civilizations = FALSE //if the job is for civilization maps
 /datum/job/var/is_cowboy = FALSE
+/datum/job/var/is_law = FALSE
+/datum/job/var/is_outlaw = FALSE
 /datum/job/var/is_ww1 = FALSE
 /datum/job/var/is_ww2 = FALSE
 /datum/job/var/is_reichstag = FALSE
@@ -51,9 +53,22 @@
 /datum/job/var/is_yama = FALSE
 /datum/job/var/is_ichi = FALSE
 /datum/job/var/is_football = FALSE
-
+/datum/job/var/is_samurai = FALSE
+/datum/job/var/is_eastern = FALSE
+/datum/job/var/is_western = FALSE
+/datum/job/var/is_abashiri = FALSE
+/datum/job/var/is_nva = FALSE
+/datum/job/var/is_capitol = FALSE
+/datum/job/var/is_paratrooper = FALSE
+/datum/job/var/is_vietcong = FALSE
+/datum/job/var/is_upa = FALSE
+/datum/job/var/can_be_female = FALSE
+/datum/job/var/is_occupation = FALSE
 /datum/job/var/squad = 0
 /datum/job/var/uses_squads = FALSE
+/datum/job/var/is_yeltsin = FALSE
+/datum/job/var/is_whitehouse = FALSE
+/datum/job/var/is_kremlin = FALSE
 
 /datum/job/var/can_get_coordinates = FALSE
 // new autobalance stuff - Kachnov

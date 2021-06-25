@@ -29,10 +29,13 @@
 	if (H.getStatCoeff("crafting") < 1.7)
 		user << "You don't have the skills to use this."
 		return
-	if (!map.civilizations && map.ID != MAP_TRIBES && (user.original_job_title != "Blacksmith" && user.original_job_title != "Pioneer Blacksmith" && user.original_job_title != "Town Blacksmith" && user.original_job_title != "Ferreiro" && user.original_job_title != "Ferrero" && user.original_job_title != "Grofsmid" && user.original_job_title != "Forgeron" && user.original_job_title != "British Blacksmith" && user.original_job_title != "Marooned Pirate Crew" && user.original_job_title != "Schmied"))
+	if (!map.civilizations && map.ID != MAP_TRIBES && map.ID != MAP_THREE_TRIBES && map.ID != MAP_FOUR_KINGDOMS && map.ID !=MAP_GULAG13 && (user.original_job_title != "Blacksmith" && user.original_job_title != "Pioneer Blacksmith" && user.original_job_title != "Town Blacksmith" && user.original_job_title != "Ferreiro" && user.original_job_title != "Ferrero" && user.original_job_title != "Grofsmid" && user.original_job_title != "Forgeron" && user.original_job_title != "British Blacksmith" && user.original_job_title != "Marooned Pirate Crew" && user.original_job_title != "Schmied"))
 		user << "You don't have the skills to use this. Ask a blacksmith."
 		return
-	if (map.ID == MAP_TRIBES && (H.gorillaman || H.ant || H.wolfman || H.lizard || H.crab))
+	if ((map.ID == MAP_TRIBES || map.ID == MAP_THREE_TRIBES || map.ID == MAP_FOUR_KINGDOMS) && (H.gorillaman || H.ant || H.wolfman || H.lizard || H.crab))
+		user << "You don't know how to use this."
+		return
+	if (map.ID == MAP_FOUR_KINGDOMS && (H.gorillaman || H.ant || H.wolfman || H.lizard || H.crab))
 		user << "You don't know how to use this."
 		return
 	else
@@ -50,9 +53,10 @@
 			in_use = TRUE
 			update_icon()
 			playsound(loc, 'sound/effects/clang.ogg', 100, TRUE)
-			if (do_after(user,15*P.amount,src))
+			var/initial_amount = P.amount //no more speedhack
+			if (do_after(user,15*initial_amount,src) && P.amount == initial_amount)
 				user << "<span class='notice'>You smite the pig into steel.</span>"
-				if (P && P.amount)
+				if (P && P.amount == initial_amount)
 					var/amt = P.amount
 					qdel(P)
 					var/obj/item/stack/material/steel/I = new/obj/item/stack/material/steel(loc)
@@ -67,9 +71,10 @@
 			in_use = TRUE
 			update_icon()
 			playsound(loc, 'sound/effects/clang.ogg', 100, TRUE)
-			if (do_after(user,15*P.amount,src))
+			var/initial_amount = P.amount //no more speedhack
+			if (do_after(user,15*initial_amount,src) && P.amount == initial_amount)
 				user << "<span class='notice'>You smite the sponge iron into wrought iron.</span>"
-				if (P && P.amount)
+				if (P && P.amount == initial_amount)
 					var/amt = P.amount
 					qdel(P)
 					var/obj/item/stack/material/iron/I = new/obj/item/stack/material/iron(loc)
@@ -449,13 +454,13 @@
 								if (do_after(user,10*mat,src,can_move=FALSE))
 									if (ML.capacity >= mat)
 										ML.capacity -= mat
+										user << "You finish crafting \the [parsed_choice2[1]]."
+										var/obj/item/weapon/material/rtype = anvil_recipes[parsed_choice2[1]][9]
+										new rtype (loc,ML.current_material)
 										if (ML.capacity < 1)
 											ML.current_material = null
 											ML.capacity = 0
 											ML.update_icon()
-										user << "You finish crafting \the [parsed_choice2[1]]."
-										var/obj/item/weapon/material/rtype = anvil_recipes[parsed_choice2[1]][9]
-										new rtype (loc,ML.current_material)
 
 									in_use = FALSE
 								else
@@ -514,13 +519,13 @@
 								if (do_after(user,10*mat,src,can_move=FALSE))
 									if (ML.capacity >= mat)
 										ML.capacity -= mat
+										user << "You finish crafting \the [parsed_choice2[1]]."
+										var/obj/item/weapon/material/rtype = anvil_recipes[parsed_choice2[1]][9]
+										new rtype (loc,ML.current_material)
 										if (ML.capacity < 1)
 											ML.current_material = null
 											ML.capacity = 0
 											ML.update_icon()
-										user << "You finish crafting \the [parsed_choice2[1]]."
-										var/obj/item/weapon/material/rtype = anvil_recipes[parsed_choice2[1]][9]
-										new rtype (loc,ML.current_material)
 
 									in_use = FALSE
 								else
@@ -575,13 +580,13 @@
 								if (do_after(user,10*mat,src,can_move=FALSE))
 									if (ML.capacity >= mat)
 										ML.capacity -= mat
+										user << "You finish crafting \the [parsed_choice2[1]]."
+										var/obj/item/weapon/material/rtype = anvil_recipes[parsed_choice2[1]][9]
+										new rtype (loc,ML.current_material)
 										if (ML.capacity < 1)
 											ML.current_material = null
 											ML.capacity = 0
 											ML.update_icon()
-										user << "You finish crafting \the [parsed_choice2[1]]."
-										var/obj/item/weapon/material/rtype = anvil_recipes[parsed_choice2[1]][9]
-										new rtype (loc,ML.current_material)
 
 									in_use = FALSE
 								else
@@ -680,6 +685,71 @@
 								in_use = FALSE
 							update_icon()
 							return
+					if ("keys")
+						var/list/newlist = list("Cancel")
+						var/mat = 0
+						for(var/i in anvil_recipes)
+							if (anvil_recipes[i])
+								mat = 0
+								if (ML.current_material == "bronze")
+									mat = anvil_recipes[i][7]
+								if (ML.current_material == "copper")
+									mat = anvil_recipes[i][7]*1.2
+								if (ML.current_material == "tin")
+									mat = anvil_recipes[i][7]*1.4
+								if (ML.current_material == "gold")
+									mat = anvil_recipes[i][5]
+								if (ML.current_material == "silver")
+									mat = anvil_recipes[i][5]
+								if (ML.current_material == "lead")
+									mat = anvil_recipes[i][5]
+								if (ML.current_material == "iron")
+									mat = anvil_recipes[i][6]
+								if (ML.current_material == "steel")
+									mat = anvil_recipes[i][5]
+								if (anvil_recipes[i][2] == "keys" && map.ordinal_age >= anvil_recipes[i][3] && map.ordinal_age <= anvil_recipes[i][4] && mat > 0)
+									newlist += "[anvil_recipes[i][1]] - [mat] [ML.current_material]"
+						var/choice2 = WWinput(H, "What do you want to craft?", "Anvil", "Cancel", newlist)
+						if (choice2 == "Cancel")
+							return
+						var/list/parsed_choice2 = splittext(choice2," - ")
+						if (anvil_recipes[parsed_choice2[1]])
+							if (ML.current_material == "bronze")
+								mat = anvil_recipes[parsed_choice2[1]][7]
+							if (ML.current_material == "copper")
+								mat = anvil_recipes[parsed_choice2[1]][7]*1.2
+							if (ML.current_material == "tin")
+								mat = anvil_recipes[parsed_choice2[1]][7]*1.4
+							if (ML.current_material == "gold")
+								mat = anvil_recipes[parsed_choice2[1]][5]
+							if (ML.current_material == "silver")
+								mat = anvil_recipes[parsed_choice2[1]][5]
+							if (ML.current_material == "lead")
+								mat = anvil_recipes[parsed_choice2[1]][5]
+							if (ML.current_material == "iron")
+								mat = anvil_recipes[parsed_choice2[1]][6]
+							if (ML.current_material == "steel")
+								mat = anvil_recipes[parsed_choice2[1]][5]
+							if (ML.capacity >= mat)
+								user << "You begin crafting \the [parsed_choice2[1]]..."
+								in_use = TRUE
+								update_icon()
+								if (do_after(user,10*mat,src,can_move=FALSE))
+									if (ML.capacity >= mat)
+										ML.capacity -= mat
+										user << "You finish crafting \the [parsed_choice2[1]]."
+										var/obj/item/weapon/material/rtype = anvil_recipes[parsed_choice2[1]][9]
+										new rtype (loc,ML.current_material)
+										if (ML.capacity < 1)
+											ML.current_material = null
+											ML.capacity = 0
+											ML.update_icon()
+
+									in_use = FALSE
+								else
+									in_use = FALSE
+								update_icon()
+								return
 /obj/structure/anvil/steel
 	name = "steel anvil"
 	desc = "An advanced steel anvil. The blacksmith's main work tool."

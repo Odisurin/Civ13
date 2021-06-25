@@ -96,6 +96,7 @@ proc/admin_notice(var/message, var/rights)
 			body += {"<br><br>
 				<b>Rudimentary transformation:</b><font size=2><br>These transformations only create a new mob type and copy stuff over. They do not take into account MMIs and similar mob-specific things. The buttons in 'Transformations' are preferred, when possible.</font><br>
 				<A href='?src=\ref[src];simplemake=observer;mob=\ref[M]'>Observer</A> |
+				\[ Default: <A href='?src=\ref[src];simplemake=human;mob=\ref[M]'>Human</A> |
 				<A href='?src=\ref[src];simplemake=monkey;mob=\ref[M]'>Monkey</A> |
 				<A href='?src=\ref[src];simplemake=cat;mob=\ref[M]'>Cat</A> |
 				<A href='?src=\ref[src];simplemake=parrot;mob=\ref[M]'>Parrot</A> |
@@ -508,7 +509,7 @@ proc/admin_notice(var/message, var/rights)
 	set category = "Special"
 	set desc="Activates or Deactivates research."
 	set name="Toggle Research"
-	if ((!map.civilizations && !map.nomads) || map.ID == MAP_TRIBES)
+	if ((!map.civilizations && !map.nomads) || map.ID == MAP_TRIBES || map.ID == MAP_FOUR_KINGDOMS || map.ID == MAP_THREE_TRIBES)
 		usr << "<font color='red'>Error: This is only available on Civ/Nomads modes.</font>"
 		return
 	if (!(map.research_active))
@@ -562,7 +563,7 @@ proc/admin_notice(var/message, var/rights)
 	set category = "Special"
 	set desc="Changes the research."
 	set name="Set Custom Research"
-	if (!map.civilizations && !map.nomads && map.ID != MAP_TRIBES)
+	if (!map.civilizations && !map.nomads && map.ID != MAP_TRIBES && map.ID != MAP_FOUR_KINGDOMS && map.ID != MAP_THREE_TRIBES)
 		usr << "<font color='red'>Error: This is only available on Civ/Nomads modes.</font>"
 		return
 	else
@@ -571,8 +572,8 @@ proc/admin_notice(var/message, var/rights)
 			return
 		if (customresearch <= 0)
 			customresearch = 0
-		if (customresearch >= 100)
-			customresearch = 100
+		if (customresearch >= 280)
+			customresearch = 280
 
 		map.default_research = customresearch
 		map.civa_research = list(customresearch,customresearch,customresearch,null)
@@ -588,7 +589,7 @@ proc/admin_notice(var/message, var/rights)
 	set category = "Special"
 	set desc="Changes the starting age."
 	set name="Set Custom Age"
-	if (!map.civilizations && !map.nomads && map.ID != MAP_TRIBES)
+	if (!map.civilizations && !map.nomads && map.ID != MAP_TRIBES && map.ID != MAP_THREE_TRIBES && map.ID != MAP_FOUR_KINGDOMS)
 		usr << "<font color='red'>Error: This is only available on Civ/Nomads modes.</font>"
 		return
 	else
@@ -635,7 +636,7 @@ proc/admin_notice(var/message, var/rights)
 			map.age2_done = TRUE
 			map.age3_done = TRUE
 			map.age4_done = TRUE
-			map.default_research = 104
+			map.default_research = 105
 			world << "<big>The Epoch has been changed to <b>[map.age]</b></big>"
 			log_admin("[key_name(usr)] changed the map's epoch to [map.age].")
 			return
@@ -1075,6 +1076,7 @@ var/list/atom_types = null
 		current_list = replacetext(current_list,".txt","")
 		if (fexists(F3) && findtext(i,"material_recipes"))
 			var/list/craftlist_temp = file2list(F3,"\n")
+			craftlist_lists[current_list] = list()
 			for (var/j in craftlist_temp)
 				if (findtext(j, ",") && findtext(j,"RECIPE: "))
 					var/tmpj = replacetext(j, "RECIPE: ", "")
@@ -1142,15 +1144,15 @@ var/list/atom_types = null
 	src << "World Variables:"
 	src << "Radiation: [get_global_radiation()]"
 	src << "Pollution: [get_global_pollution()]"
-	src << "Chickens: [chicken_count]"
-	src << "Turkeys: [turkey_count]"
-	src << "Cows: [cow_count]"
-	src << "Goats: [goat_count]"
-	src << "Sheep: [sheep_count]"
-	src << "Pigs: [pig_count]"
-	src << "Deer: [deer_count]"
-	src << "Wolves: [wolf_count]"
-	src << "Bears: [bear_count]"
+	src << "Chickens: [chicken_count.len]"
+	src << "Turkeys: [turkey_count.len]"
+	src << "Cows: [cow_count.len]"
+	src << "Goats: [goat_count.len]"
+	src << "Sheep: [sheep_count.len]"
+	src << "Pigs: [pig_count.len]"
+	src << "Deer: [deer_count.len]"
+	src << "Wolves: [wolf_count.len]"
+	src << "Bears: [bear_count.len]"
 
 /datum/admins/proc/set_world_radiation()
 	set category = "Debug"
@@ -1173,3 +1175,23 @@ var/list/atom_types = null
 		return
 	set_global_pollution(num)
 	world.log << "[usr] set the worlds pollution to [num]."
+
+/datum/admins/proc/zombiemechanic()
+	set category = "Fun"
+	set desc="Enable zombie mechanic in the current round."
+	set name="Zombie mechanic"
+
+	if (map)
+		map.is_zombie = TRUE
+	world << "<big><b>Zombie mechanics have been enabled in the current round.</b></big>"
+	return
+
+/datum/admins/proc/fantasy_races()
+	set category = "Fun"
+	set desc="Enable fantasy race selection in the current round."
+	set name="Fantasy race selection"
+
+	if (map)
+		map.is_fantrace = TRUE
+	world << "<big><b>Fantasy race selection has been enabled in the current round.</b></big>"
+	return

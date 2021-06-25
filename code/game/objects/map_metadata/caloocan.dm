@@ -3,7 +3,7 @@
 	title = "Caloocan"
 	lobby_icon_state = "ph_us_war"
 	no_winner ="The church is under Filipino control."
-	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall/)
+	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall,/area/caribbean/no_mans_land/invisible_wall/one,/area/caribbean/no_mans_land/invisible_wall/two)
 	respawn_delay = 600
 
 	faction_organization = list(
@@ -36,7 +36,17 @@
 /obj/map_metadata/caloocan/faction2_can_cross_blocks()
 	return (processes.ticker.playtime_elapsed >= 2400 || admin_ended_all_grace_periods)
 
+/obj/map_metadata/caloocan/short_win_time(faction)
+	if (!(alive_n_of_side(faction1)) || !(alive_n_of_side(faction2)))
+		return 600
+	else
+		return 3000 // 5 minutes
 
+/obj/map_metadata/caloocan/long_win_time(faction)
+	if (!(alive_n_of_side(faction1)) || !(alive_n_of_side(faction2)))
+		return 600
+	else
+		return 3000 // 5 minutes
 /obj/map_metadata/caloocan/roundend_condition_def2name(define)
 	..()
 	switch (define)
@@ -141,3 +151,17 @@ var/no_loop_cal = FALSE
 	last_win_condition = win_condition.hash
 	return TRUE
 
+/obj/map_metadata/caloocan/check_caribbean_block(var/mob/living/human/H, var/turf/T)
+	if (!istype(H) || !istype(T))
+		return FALSE
+	var/area/A = get_area(T)
+	if (istype(A, /area/caribbean/no_mans_land/invisible_wall))
+		if (istype(A, /area/caribbean/no_mans_land/invisible_wall/one))
+			if (H.faction_text == faction1)
+				return TRUE
+		else if (istype(A, /area/caribbean/no_mans_land/invisible_wall/two))
+			if (H.faction_text == faction2)
+				return TRUE
+		else
+			return !faction1_can_cross_blocks()
+	return FALSE

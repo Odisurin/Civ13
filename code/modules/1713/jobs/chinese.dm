@@ -46,8 +46,8 @@
 	uniform.attackby(holsterh, H)
 	give_random_name(H)
 	H.s_tone = rand(-32,-24)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 
 	world << "<b><big>[H.real_name] is the Captain of the Chinese Forces!</big></b>"
 	H.add_note("Role", "You are a <b>[title]</b>, the highest ranking officer present. Your job is to command the company.")
@@ -104,8 +104,8 @@
 	uniform.attackby(holsterh, H)
 	give_random_name(H)
 	H.s_tone = rand(-32,-24)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 
 	world << "<b><big>[H.real_name] is the 1st Lieutenant of the Chinese forces!</big></b>"
 	H.add_note("Role", "You are a <b>[title]</b>, an officer in charge of the troops and their orders. The whole operation relies on you!")
@@ -159,8 +159,8 @@
 	uniform.attackby(holsterh, H)
 	give_random_name(H)
 	H.s_tone = rand(-32,-24)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 
 	H.add_note("Role", "You are a <b>[title]</b>, a sergeant leading a squad. Organize your group according to the <b>Captain or Leiutenant's</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
@@ -207,17 +207,17 @@
 	H.equip_to_slot_or_del(new /obj/item/weapon/doctor_handbook(H), slot_l_store)
 	give_random_name(H)
 	H.s_tone = rand(-32,-24)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 
 	H.add_note("Role", "You are a <b>[title]</b>, the most qualified medic present, and you are in charge of keeping the soldiers healthy.")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_MEDIUM_LOW) //muskets
+	H.setStat("rifle", STAT_MEDIUM_LOW)
 	H.setStat("dexterity", STAT_NORMAL)
 	H.setStat("swords", STAT_MEDIUM_LOW)
 	H.setStat("pistol", STAT_MEDIUM_LOW)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_VERY_HIGH)
 
 
@@ -257,17 +257,17 @@
 //back
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/boltaction/gewehr98/karabiner98k/chinese(H), slot_shoulder)
 	H.s_tone = rand(-32,-24)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 	give_random_name(H)
 	H.add_note("Role", "You are a <b>[title]</b>, a simple soldier second-class  employed by the Chinese Army. Follow your <b>Officer's</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_MEDIUM_HIGH) //muskets
+	H.setStat("rifle", STAT_MEDIUM_HIGH)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_NORMAL)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_MEDIUM_LOW)
 
 
@@ -306,16 +306,16 @@
 	H.equip_to_slot_or_del(new /obj/item/weapon/attachment/scope/adjustable/sniper_scope(H), slot_l_store)
 
 	give_random_name(H)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 	H.add_note("Role", "You are a <b>[title]</b>, a sharpshooter promoted to soldier first-class employed by the Chinese Army. Follow your <b>Officer's</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_HIGH) //muskets
+	H.setStat("rifle", STAT_HIGH)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_MEDIUM_HIGH)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_MEDIUM_LOW)
 
 
@@ -358,8 +358,8 @@
 	uniform.attackby(holsterh, H)
 	give_random_name(H)
 	H.s_tone = rand(-32,-24)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 
 	world << "<b><big>[H.real_name] is the Captain of the Chinese Forces!</big></b>"
 	H.add_note("Role", "You are a <b>[title]</b>, the highest ranking officer present. Your job is to command the company.")
@@ -412,8 +412,8 @@
 	uniform.attackby(holsterh, H)
 	give_random_name(H)
 	H.s_tone = rand(-32,-24)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 
 	world << "<b><big>[H.real_name] is the 1st Lieutenant of the Chinese forces!</big></b>"
 	H.add_note("Role", "You are a <b>[title]</b>, an officer in charge of the troops and their orders. The whole operation relies on you!")
@@ -466,8 +466,8 @@
 	uniform.attackby(holsterh, H)
 	give_random_name(H)
 	H.s_tone = rand(-32,-24)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 
 	H.add_note("Role", "You are a <b>[title]</b>, a sergeant leading a squad. Organize your group according to the <b>Captain or Leiutenant's</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
@@ -510,17 +510,17 @@
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/chinese_ushanka(H), slot_head)
 	give_random_name(H)
 	H.s_tone = rand(-32,-24)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 
 	H.add_note("Role", "You are a <b>[title]</b>, the most qualified medic present, and you are in charge of keeping the soldiers healthy.")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_MEDIUM_LOW) //muskets
+	H.setStat("rifle", STAT_MEDIUM_LOW)
 	H.setStat("dexterity", STAT_NORMAL)
 	H.setStat("swords", STAT_MEDIUM_LOW)
 	H.setStat("pistol", STAT_MEDIUM_LOW)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_VERY_HIGH)
 
 
@@ -565,17 +565,17 @@
 	khaki_webbingh.attackby(new/obj/item/ammo_magazine/gewehr98, H)
 	khaki_webbingh.attackby(new/obj/item/ammo_magazine/gewehr98, H)
 	khaki_webbingh.attackby(new/obj/item/weapon/grenade/ww2/rgd33, H)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 	give_random_name(H)
 	H.add_note("Role", "You are a <b>[title]</b>, a simple soldier second-class  employed by the Chinese Army. Follow your <b>Officer's</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_MEDIUM_HIGH) //muskets
+	H.setStat("rifle", STAT_MEDIUM_HIGH)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_NORMAL)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_MEDIUM_LOW)
 
 
@@ -618,18 +618,18 @@
 	khaki_webbingh.attackby(new/obj/item/ammo_magazine/gewehr98, H)
 	khaki_webbingh.attackby(new/obj/item/weapon/grenade/ww2/rgd33, H)
 	give_random_name(H)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 	else
 		return
 	H.add_note("Role", "You are a <b>[title]</b>, a sharpshooter promoted to soldier first-class employed by the Chinese Army. Follow your <b>Officer's</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_HIGH) //muskets
+	H.setStat("rifle", STAT_HIGH)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_MEDIUM_HIGH)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_MEDIUM_LOW)
 
 
@@ -670,16 +670,16 @@
 	khaki_webbingh.attackby(new/obj/item/weapon/grenade/ww2/rgd33, H)
 
 	give_random_name(H)
-	if (H.f_style != "Full Beard" && H.f_style != "Medium Beard" && H.f_style != "Long Beard" && H.f_style != "Very Long Beard" && H.f_style != "Dwarf Beard" && H.f_style != "Volaju" && H.f_style != "Abraham Lincoln Beard" && H.f_style != "Van Dyke Mustache" && H.f_style != "Hulk Hogan Mustache")
-		H.f_style = pick("Shaved","Hipster Beard","Goatee")
+	if (H.f_style != "Shaved" && H.f_style != "Short Facial Hair" && H.f_style != "Goatee")
+		H.f_style = pick("Shaved","Short Facial Hair","Goatee")
 	H.add_note("Role", "You are a <b>[title]</b>, a sharpshooter promoted to soldier first-class employed by the Chinese Army. Follow your <b>Officer's</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_HIGH) //muskets
+	H.setStat("rifle", STAT_HIGH)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_MEDIUM_HIGH)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_MEDIUM_LOW)
 
 

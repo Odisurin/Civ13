@@ -279,7 +279,7 @@
 	not_disassemblable = FALSE
 	New()
 		..()
-		crossoverlay = image(icon=src.icon, icon_state="[base_icon]_used",layer=MOB_LAYER+0.8)
+		crossoverlay = image(icon=src.icon, icon_state="[base_icon]_used")
 
 /obj/structure/cross/tau
 	name = "tau cross"
@@ -381,7 +381,7 @@
 	not_disassemblable = FALSE
 	New()
 		..()
-		poverlay = image(icon=src.icon, icon_state="pillory_lower0",layer=MOB_LAYER+1)
+		poverlay = image(icon=src.icon, icon_state="pillory_lower0")
 		hoverlay = icon(icon=src.icon, icon_state="pillory_handoverlay")
 /obj/structure/pillory/New()
 	..()
@@ -497,7 +497,7 @@
 	not_disassemblable = FALSE
 	New()
 		..()
-		poverlay = image(icon=src.icon, icon_state="post_execution",layer=MOB_LAYER+1)
+		poverlay = image(icon=src.icon, icon_state="post_execution")
 		hoverlay = icon(icon=src.icon, icon_state="post_execution_rope")
 /obj/structure/post_execution/New()
 	..()
@@ -522,7 +522,7 @@
 	if (hanging)
 		hanging.forceMove(loc)
 		hanging.lying = 0
-		hanging.dir = SOUTH
+		hanging.dir = NORTH
 
 	else
 		overlays.Cut()
@@ -546,7 +546,7 @@
 			visible_message("<span class = 'danger'>[hangman] ties [target == hangman ? "themselves" : target] to the post!</span>")
 			hanging = target
 			target.loc = get_turf(src)
-			target.dir = SOUTH
+			target.dir = NORTH
 			spawn(10)
 				target.update_icons()
 				target.anchored = 1

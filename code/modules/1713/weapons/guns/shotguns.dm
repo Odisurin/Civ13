@@ -5,6 +5,7 @@
 	icon = 'icons/obj/guns/rifles.dmi'
 	// 15% more accurate than SMGs
 	equiptimer = 17
+	magazine_type = /obj/item/ammo_magazine/shellbox
 	accuracy_list = list(
 
 		// small body parts: head, hand, feet
@@ -69,7 +70,7 @@
 	slot_flags = SLOT_SHOULDER
 	caliber = "12gauge"
 	load_method = SINGLE_CASING
-	ammo_type = /obj/item/ammo_casing/shotgun
+	ammo_type = /obj/item/ammo_casing/shotgun/buckshot
 	handle_casings = HOLD_CASINGS
 	stat = "rifle"
 	move_delay = 4
@@ -113,7 +114,7 @@
 	slot_flags = SLOT_SHOULDER
 	caliber = "12gauge"
 	load_method = SINGLE_CASING
-	ammo_type = /obj/item/ammo_casing/shotgun
+	ammo_type = /obj/item/ammo_casing/shotgun/buckshot
 	handle_casings = HOLD_CASINGS
 	stat = "rifle"
 	move_delay = 4
@@ -191,7 +192,7 @@
 	slot_flags = SLOT_SHOULDER
 	caliber = "12gauge"
 	load_method = SINGLE_CASING
-	ammo_type = /obj/item/ammo_casing/shotgun
+	ammo_type = /obj/item/ammo_casing/shotgun/buckshot
 	handle_casings = HOLD_CASINGS
 	stat = "rifle"
 	move_delay = 4
@@ -222,3 +223,6 @@
 		chambered = AC
 
 	update_icon()
+
+
+

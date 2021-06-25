@@ -5,6 +5,7 @@
 	var/plough_road = FALSE
 	var/cattle_gender = null			//Nice info to have about the cattle. Will make it easier to work with
 	var/calf = FALSE  //Each gender was taking this var
+	fat_penalty = 1 //For ballance reasons
 /mob/living/simple_animal/cattle/cow
 	name = "cow"
 	cattle_gender = "female"
@@ -75,27 +76,23 @@
 		plough = FALSE
 
 /mob/living/simple_animal/cattle/cow/death()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		cow_count -= 1
+
+	cow_count &= src
 	..()
 /mob/living/simple_animal/cattle/cow/Destroy()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		cow_count -= 1
+
+	cow_count &= src
 	..()
 /mob/living/simple_animal/cattle/bull/death()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		cow_count -= 1
+
+	cow_count &= src
 	..()
 /mob/living/simple_animal/cattle/bull/Destroy()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		cow_count -= 1
+
+	cow_count &= src
 	..()
 /mob/living/simple_animal/cattle/bull/New()
-	cow_count += 1
+	cow_count |= src
 	..()
 	spawn(1)
 		if (calf)
@@ -112,7 +109,7 @@
 				mob_size = MOB_LARGE
 
 /mob/living/simple_animal/cattle/cow/New()
-	cow_count += 1
+	cow_count |= src
 	udder = new(50)
 	udder.my_atom = src
 	..()
@@ -286,7 +283,7 @@
 		overpopulationCountdown--
 		return
 
-	if (!pregnant && cow_count < 30)
+	if (!pregnant && cow_count.len < 30)
 		var/nearbyObjects = range(1,src) //3x3 area around cow
 		for(var/mob/living/simple_animal/cattle/bull/M in nearbyObjects)
 			if (M.stat == CONSCIOUS)
@@ -371,6 +368,7 @@
 	scavenger = 1 //if it will be attracted to trash, rotting meat, etc (mice, mosquitoes)
 	carnivore = 1 //if it will be attracted to meat and dead bodies. Wont attack living animals by default.
 	wandersounds = list('sound/animals/pig/pig_1.ogg','sound/animals/pig/pig_2.ogg')
+	fat_extra = 2
 
 /mob/living/simple_animal/pig_gilt
 	name = "pig gilt"
@@ -401,29 +399,26 @@
 	scavenger = 1 //if it will be attracted to trash, rotting meat, etc (mice, mosquitoes)
 	carnivore = 1 //if it will be attracted to meat and dead bodies. Wont attack living animals by default.
 	wandersounds = list('sound/animals/pig/pig_1.ogg','sound/animals/pig/pig_2.ogg')
+	fat_extra = 2
 
 /mob/living/simple_animal/pig_gilt/death()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		pig_count -= 1
+
+	pig_count &= src
 	..()
 /mob/living/simple_animal/pig_boar/death()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		pig_count -= 1
+
+	pig_count &= src
 	..()
 /mob/living/simple_animal/pig_gilt/Destroy()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		pig_count -= 1
+
+	pig_count &= src
 	..()
 /mob/living/simple_animal/pig_boar/Destroy()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		pig_count -= 1
+
+	pig_count &= src
 	..()
 /mob/living/simple_animal/pig_boar/New()
-	pig_count += 1
+	pig_count |= src
 	..()
 	spawn(1)
 		if (piglet)
@@ -440,7 +435,7 @@
 				mob_size = MOB_MEDIUM
 
 /mob/living/simple_animal/pig_gilt/New()
-	pig_count += 1
+	pig_count |= src
 	udder = new(50)
 	udder.my_atom = src
 	..()
@@ -483,7 +478,7 @@
 		overpopulationCountdown--
 		return
 
-	if (!pregnant && pig_count < 30)
+	if (!pregnant && pig_count.len < 30)
 		var/nearbyObjects = range(1,src) //3x3 area around pig
 		for(var/mob/living/simple_animal/pig_boar/M in nearbyObjects)
 			if (M.stat == CONSCIOUS)
@@ -523,7 +518,7 @@
 	desc = "A small Wooly Mammal, with a stocky Body, Long snout and small eyes they are a member of the Suidae Family."
 	icon_state = "boar_boar"
 	icon_living = "boar_boar"
-	icon_dead = ""
+	icon_dead = "boar_dead"
 	speak = list("Gweeeeiiirrr!","Ghhhhhhh!","Oeerrrrhhh!")
 	emote_see = list("rolls on the ground", "lays with it's belly up", "snorts")
 	speak_chance = 1
@@ -550,6 +545,7 @@
 	predatory_carnivore = 1
 	behaviour = "defends"
 	wandersounds = list('sound/animals/pig/pig_1.ogg','sound/animals/pig/pig_2.ogg')
+	fat_extra = 2
 
 /mob/living/simple_animal/boar_gilt
 	name = "boar gilt"
@@ -581,29 +577,26 @@
 	carnivore = 1 //if it will be attracted to meat and dead bodies. Wont attack living animals by default.
 	behaviour = "defends"
 	wandersounds = list('sound/animals/pig/pig_1.ogg','sound/animals/pig/pig_2.ogg')
+	fat_extra = 2
 
 /mob/living/simple_animal/boar_gilt/death()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		boar_count -= 1
+
+	boar_count &= src
 	..()
 /mob/living/simple_animal/boar_boar/death()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		boar_count -= 1
+
+	boar_count &= src
 	..()
 /mob/living/simple_animal/boar_gilt/Destroy()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		boar_count -= 1
+
+	boar_count &= src
 	..()
 /mob/living/simple_animal/boar_gilt/Destroy()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		boar_count -= 1
+
+	boar_count &= src
 	..()
 /mob/living/simple_animal/boar_gilt/New()
-	boar_count += 1
+	boar_count |= src
 	..()
 	spawn(1)
 		if (piglet)
@@ -620,7 +613,7 @@
 				mob_size = MOB_MEDIUM
 
 /mob/living/simple_animal/boar_gilt/New()
-	boar_count += 1
+	boar_count |= src
 	udder = new(50)
 	udder.my_atom = src
 	..()
@@ -663,7 +656,7 @@
 		overpopulationCountdown--
 		return
 
-	if (!pregnant && boar_count < 30)
+	if (!pregnant && boar_count.len < 30)
 		var/nearbyObjects = range(1,src) //3x3 area around pig
 		for(var/mob/living/simple_animal/boar_boar/M in nearbyObjects)
 			if (M.stat == CONSCIOUS)
@@ -733,7 +726,7 @@
 	wandersounds = list('sound/animals/goat/goat_1.ogg','sound/animals/goat/goat_2.ogg','sound/animals/goat/goat_3.ogg')
 
 /mob/living/simple_animal/goat/New()
-	goat_count += 1
+	goat_count |= src
 	..()
 	spawn(1)
 		if (lamb)
@@ -762,14 +755,12 @@
 	var/overpopulationCountdown = 0
 
 /mob/living/simple_animal/goat/death()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		goat_count -= 1
+
+	goat_count &= src
 	..()
 /mob/living/simple_animal/goat/Destroy()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		goat_count -= 1
+
+	goat_count &= src
 	..()
 /mob/living/simple_animal/goat/female/New()
 	udder = new(50)
@@ -812,7 +803,7 @@
 		overpopulationCountdown--
 		return
 
-	if (!pregnant && goat_count < 35)
+	if (!pregnant && goat_count.len < 35)
 		var/nearbyObjects = range(1,src) //3x3 area around animal
 		for(var/mob/living/simple_animal/goat/M in nearbyObjects)
 			if (M.stat == CONSCIOUS && !istype(M, /mob/living/simple_animal/goat/female))
@@ -910,17 +901,15 @@
 	var/birthCountdown = 0
 	var/overpopulationCountdown = 0
 /mob/living/simple_animal/sheep/death()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		sheep_count -= 1
+
+	sheep_count &= src
 	..()
 /mob/living/simple_animal/sheep/Destroy()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		sheep_count -= 1
+
+	sheep_count &= src
 	..()
 /mob/living/simple_animal/sheep/New()
-	sheep_count += 1
+	sheep_count |= src
 	..()
 	spawn(1)
 		if (lamb)
@@ -1005,7 +994,7 @@
 		overpopulationCountdown--
 		return
 
-	if (!pregnant && sheep_count < 35)
+	if (!pregnant && sheep_count.len < 35)
 		var/nearbyObjects = range(1,src) //3x3 area around animal
 		for(var/mob/living/simple_animal/sheep/M in nearbyObjects)
 			if (M.stat == CONSCIOUS && !istype(M, /mob/living/simple_animal/sheep/female))
@@ -1064,6 +1053,7 @@
 	var/content_size = 0
 	var/list/packed_items = list()
 	herbivore = 1
+	fat_extra = 3
 
 /mob/living/simple_animal/camel/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (!stat && user.a_intent == I_HELP && icon_state != icon_dead && !istype(O, /obj/item/weapon/leash))

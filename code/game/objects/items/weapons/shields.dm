@@ -334,6 +334,8 @@ obj/item/weapon/shield/attack_self(mob/user as mob)
 	health = 20 // hardness of wood
 	slowdown = 0.22
 
+/* Tribes Shields */
+
 /obj/item/weapon/shield/iron/orc
 	name = "uruk-hai shield"
 	icon_state = "orc_shield"
@@ -343,3 +345,97 @@ obj/item/weapon/shield/attack_self(mob/user as mob)
 	w_class = 3.0
 	base_block_chance = 40
 	slowdown = 0.3
+
+/obj/item/weapon/shield/chitin
+	name = "chitin buckler"
+	desc = "a rounded shield made out of fused chitinous plates."
+	icon_state = "chitin_buckler"
+	item_state = "chitin_buckler"
+	material = "chitin"
+	health = 20
+	w_class = 3.0
+	base_block_chance = 25
+	slowdown = 0.2
+
+/obj/item/weapon/shield/chitin/large
+	name = "chitin shield"
+	desc = "a large shield made out of fused chitinous plates."
+	icon_state = "chitin_shield"
+	item_state = "chitin_shield"
+	material = "chitin"
+	health = 25
+	w_class = 3.0
+	base_block_chance = 37
+	slowdown = 0.35
+
+/* Tribes Shields -End*/
+
+
+/obj/item/weapon/shield/metal_riot
+	name = "riot shield"
+	desc = "A riot sheild designed to be excellent in blocking during prisoner uprisings"
+	icon_state = "metal_riot"
+	item_state = "metal_riot"
+	material = "iron"
+	health = 90
+	w_class = 2
+	base_block_chance = 65
+	slowdown = 0.35
+
+/obj/item/weapon/shield/balistic
+	name = "balistic shield"
+	desc = "A sheild designed to be excellent in blocking projectiles."
+	icon_state = "metal_riot"
+	item_state = "metal_riot"
+	material = "steel"
+	health = 90
+	w_class = 4
+	base_block_chance = 85
+	slowdown = 2.85
+//////////////////////////////////////SKYRIM////////////////////////////////////////
+/obj/item/weapon/shield/tes13
+	name = "iron shield"
+	icon_state = "iron_shield_tes13"
+	item_state = "iron_shield_tes13"
+	material = "iron"
+	health = 60
+	w_class = 3.0
+	base_block_chance = 40
+	slowdown = 0.05
+/obj/item/weapon/shield/tes13/handle_shield(mob/user, var/damage, atom/damage_source = null, mob/attacker = null, var/def_zone = null, var/attack_text = "the attack")
+	if (user.incapacitated())
+		return FALSE
+
+	//block as long as they are not directly behind us
+	var/bad_arc = reverse_direction(user.dir) //arc of directions from which we cannot block
+	if (check_shield_arc(user, bad_arc, damage_source, attacker))
+		if (prob(get_block_chance(user, damage, damage_source, attacker)))
+			user.visible_message("<font color='#E55300'><big>\The [user] blocks [attack_text] with \the [src]!</big></font>")
+			if (istype(damage_source, /obj/item/weapon/melee) || istype(damage_source, /obj/item/weapon/material/hatchet))
+				health -= 2
+			else
+				health--
+			if (istype(damage_source, /obj/item/weapon/material/tes13/mace))
+				src.health -= 10
+			check_health()
+			return TRUE
+	return FALSE
+/obj/item/weapon/shield/tes13/stormcloak
+	name = "stormcloak shield"
+	icon_state = "stormcloak"
+	item_state = "stormcloak"
+	material = "wood"
+	health = 60
+	w_class = 3.0
+	base_block_chance = 40
+	slowdown = 0.05
+
+/obj/item/weapon/shield/tes13/whiterun
+	name = "whiterun guard shield"
+	icon_state = "whiterun"
+	item_state = "whiterun"
+	material = "wood"
+	health = 60
+	w_class = 3.0
+	base_block_chance = 40
+	slowdown = 0.05

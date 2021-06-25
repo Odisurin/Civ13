@@ -2,8 +2,9 @@
 	ID = MAP_OMAHA
 	title = "Omaha Beach"
 	lobby_icon_state = "ww2"
-	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall/)
+	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall,/area/caribbean/no_mans_land/invisible_wall/one,/area/caribbean/no_mans_land/invisible_wall/two)
 	respawn_delay = 1200
+	var/victory_time = 24000
 
 	faction_organization = list(
 		GERMAN,
@@ -26,7 +27,7 @@
 	gamemode = "Siege"
 /obj/map_metadata/omaha/job_enabled_specialcheck(var/datum/job/J)
 	..()
-	if (J.is_tanker == TRUE || J.is_reichstag == TRUE || J.is_ss_panzer == TRUE || J.is_navy == TRUE || (istype(J, /datum/job/american/soldier_ww2_filipino)))
+	if (J.is_tanker == TRUE || J.is_occupation == TRUE || J.is_reichstag == TRUE || J.is_ss_panzer == TRUE || J.is_navy == TRUE || (istype(J, /datum/job/american/soldier_ww2_filipino)))
 		. = FALSE
 	else if (J.is_ww2 == TRUE && J.is_reichstag == FALSE)
 		. = TRUE
@@ -86,7 +87,7 @@ var/no_loop_o = FALSE
 /obj/map_metadata/omaha/update_win_condition()
 	if (!win_condition_specialcheck())
 		return FALSE
-	if (world.time >= 24000)
+	if (world.time >= victory_time)
 		if (win_condition_spam_check)
 			return FALSE
 		ticker.finished = TRUE
@@ -149,3 +150,34 @@ var/no_loop_o = FALSE
 		win_condition.hash = 0
 	last_win_condition = win_condition.hash
 	return TRUE
+
+/obj/map_metadata/omaha/check_caribbean_block(var/mob/living/human/H, var/turf/T)
+	if (!istype(H) || !istype(T))
+		return FALSE
+	var/area/A = get_area(T)
+	if (istype(A, /area/caribbean/no_mans_land/invisible_wall))
+		if (istype(A, /area/caribbean/no_mans_land/invisible_wall/one))
+			if (H.faction_text == faction1)
+				return TRUE
+		else if (istype(A, /area/caribbean/no_mans_land/invisible_wall/two))
+			if (H.faction_text == faction2)
+				return TRUE
+		else
+			return !faction1_can_cross_blocks()
+	return FALSE
+
+/////////////////MICROMAHA///////////
+/obj/map_metadata/omaha/micromaha
+	title = "Micro Omaha Beach"
+	ID = MAP_MICROMAHA
+	respawn_delay = 600
+	victory_time = 15000
+	faction_distribution_coeffs = list(GERMAN = 0.4, AMERICAN = 0.6)
+	mission_start_message = "<font size=4>All factions have <b>4 minutes</b> to prepare before the ceasefire ends!<br>The Germans will win if they hold out for <b>25 minutes</b>. The Americans will win if they manage to capture the <b>rear bunkers</b>.</font>"
+
+/obj/map_metadata/omaha/micromaha/faction1_can_cross_blocks()
+	return (processes.ticker.playtime_elapsed >= 2400 || admin_ended_all_grace_periods)
+
+/obj/map_metadata/omaha/micromaha/faction2_can_cross_blocks()
+	return (processes.ticker.playtime_elapsed >= 2400 || admin_ended_all_grace_periods)
+

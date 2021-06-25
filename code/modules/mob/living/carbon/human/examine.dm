@@ -281,7 +281,7 @@
 		if ( findtext(pose,".",length(pose)) == FALSE && findtext(pose,"!",length(pose)) == FALSE && findtext(pose,"?",length(pose)) == FALSE )
 			pose = addtext(pose,".") //Makes sure all emotes end with a period.
 		msg += "\n[T.He] [T.is] [pose]"
-	if (!map.civilizations && map.ID != MAP_LITTLE_CREEK && map.ID != MAP_GULAG13 && map.ID != MAP_THE_ART_OF_THE_DEAL)
+	if (!map.civilizations && map.ID != MAP_LITTLE_CREEK && map.ID != MAP_GULAG13 && map.ID != MAP_THE_ART_OF_THE_DEAL && map.ID != MAP_OCCUPATION)
 		if (original_job)
 			if (ishuman(user) && user != src)
 				var/mob/living/human/H = user
@@ -309,12 +309,12 @@
 			var/mob/living/human/H = user
 			if (istype(H.original_job, /datum/job/civilian/prisoner) && istype(original_job, /datum/job/civilian/prisoner))
 				msg += "<br><i>You recognize [T.him] as a prisoner named <b>[real_name]</b>.</i>"
-				var/datum/job/civilian/prisoner/PT = original_job
-				var/datum/job/civilian/prisoner/PO = H.original_job
-				if (PO.nationality == PT.nationality)
-					msg += "<br><i>You recognize [T.him] as a fellow <b>[PT.nationality]</b>!</i>"
-				if (H.original_job_title == "Collaborator" && (original_job_title == H.original_job_title || faction_text=="RUSSIAN"))
+				if (H.nationality == nationality)
+					msg += "<br><i>You recognize [T.him] as a fellow <b>[H.nationality]</b>!</i>"
+				if (H.original_job_title == "Collaborator" && original_job_title == H.original_job_title)
 					msg += "<br><i>You recognize [T.him] as a fellow <b>collaborator</b>!</i>"
+			if (H.faction_text == "RUSSIAN" && original_job_title == "Collaborator")
+				msg += "<br><i>You recognize [T.him] as a <b>collaborator</b>!</i>"
 	else if (map.ID == MAP_THE_ART_OF_THE_DEAL)
 		if (ishuman(user) && user != src)
 			var/mob/living/human/H = user
@@ -322,10 +322,34 @@
 				msg += "<br><i>[T.He] is a member of the Police.</i>"
 			if (src.gun_permit && H.civilization == "Police")
 				msg += "<br><b>[T.He] has a valid gun permit.</b></b>"
+	else if (map.ID == MAP_OCCUPATION)
+		if (ishuman(user) && user != src)
+			var/mob/living/human/H = user
+			if (istype(H.original_job, /datum/job/civilian/ukrainian/occupation) && istype(original_job, /datum/job/civilian/ukrainian/occupation))
+				msg += "<br><i>You recognize [T.him] as a fellow Partisan named <b>[real_name]</b>.</i>"
+			if (istype(H.original_job, /datum/job/civilian/occupation) && istype(original_job, /datum/job/civilian/occupation))
+				if (H.nationality == nationality)
+					msg += "<br><i>You recognize [T.him] as a fellow <b>[H.nationality]</b>!</i>"
+				if (H.original_job_title == "Auxillary Police" && original_job_title == H.original_job_title)
+					msg += "<br><i>You recognize [T.him] as a fellow <b>Auxillary Police</b>!</i>"
+			if (H.faction_text == "GERMAN" && original_job_title == "Auxillary Police")
+				msg += "<br><i>You recognize [T.him] as a <b>collaborator</b>!</i>"
 
 	else if (map.civilizations)
 		if (ishuman(user) && user != src)
 			var/mob/living/human/H = user
+			if (map.ID == MAP_NATIONSRP)
+				if (H.original_job_title == original_job_title)
+					if (original_job_title == "Civilization A Citizen")
+						msg += "<br><i><font color='green'>You recognize [T.him] as a citizen of your nation, <b>[civname_a]</b>.</i></font>"
+					else
+						msg += "<br><i><font color='green'>You recognize [T.him] as a citizen of your nation, <b>[civname_b]</b>.</i></font>"
+
+				else
+					if (original_job_title == "Civilization A Citizen")
+						msg += "<br><font color='red'><i>[T.He] is a citizen of the <b>[civname_a]</b>.</font></i>"
+					else
+						msg += "<br><font color='red'><i>[T.He] is a citizen of the <b>[civname_b]</b>.</font></i>"
 			if (H.religion == religion && religion_style == "Cultists" && religious_clergy == "Cultists")
 				msg += "<br><i>You recognize [T.him] as an ordained <b>Cultist</b> of your cult, <b>[religion]</b>.</i>"
 			else if (H.religion == religion && religion_style == "Cultists" && religious_clergy != "Cultists")

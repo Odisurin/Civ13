@@ -41,11 +41,17 @@
 
 	var/radiation = 0
 
+	var/list/mergewith = list()
 /atom/Destroy()
 	if (reagents)
 		qdel(reagents)
 		reagents = null
 	. = ..()
+
+/atom/proc/can_join_with(var/atom/W)
+	return FALSE
+/atom/proc/check_relatives(var/update_self = FALSE, var/update_others = FALSE)
+	return FALSE
 
 /atom/proc/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = FALSE)
 	//Purpose: Determines if the object (or airflow) can pass this atom.
@@ -193,6 +199,10 @@
 		if (!NS.flammable)
 			return
 		else
+			if(istype(NS, /obj/item/stack/material/wood))
+				var/obj/item/stack/material/wood/W = NS
+				if(W.ash_production) //Needed to not break the ash production from wood
+					return
 			if (prob(27))
 				visible_message("<span class = 'warning'>\The [NS] is burned away.</span>")
 				if (prob(3))

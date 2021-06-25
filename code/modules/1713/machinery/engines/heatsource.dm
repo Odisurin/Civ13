@@ -10,7 +10,7 @@
 	var/on = FALSE
 	not_movable = FALSE
 	not_disassemblable = TRUE
-	var/fuels = list("petroleum", "gasoline", "diesel", "ethanol", "biodiesel", "olive_oil")
+	var/fuels = list("petroleum", "gasoline", "diesel", "ethanol", "biodiesel", "olive_oil", "fat_oil")
 /obj/structure/heatsource/New()
 	..()
 	do_light()
@@ -57,7 +57,7 @@
 			user << "You place \the [W] in \the [src], refueling it."
 			qdel(W)
 			return
-		else if (istype(W, /obj/item/weapon/leaves))
+		else if (istype(W, /obj/item/stack/material/leaf))
 			fuel += (30)*W.amount
 			user << "You place \the [W] in \the [src], refueling it."
 			qdel(W)

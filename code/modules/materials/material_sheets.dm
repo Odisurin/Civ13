@@ -98,6 +98,13 @@
 	default_type = "barbedwire"
 	value = 2
 
+/obj/item/stack/material/barbwire/ten
+	name = "Barbwire"
+	icon_state = "barbwire_stack"
+	default_type = "barbedwire"
+	value = 2
+	amount = 10
+
 /obj/item/stack/material/bronze
 	name = "bronze"
 	icon_state = "sheet-bronze"
@@ -157,6 +164,23 @@
 	icon_state = "claylump"
 	default_type = "clay"
 	value = 2
+/obj/item/stack/material/clay/attackby(obj/item/W as obj, mob/user as mob)
+	if (map.ID == MAP_GULAG13)
+		if (!istype(W)) return//I really don't understand why this check is needed
+		if (istype(W, /obj/item/weapon/key/soviet/guard))
+			user << "<span class='notice'>You make the clay into a mold of the key.</span>"
+			new/obj/item/weapon/clay/mold/key(user.loc)
+			qdel(src)
+	if (istype(W, type))
+		var/obj/item/stack/S = W
+		merge(S)
+		S.update_icon()
+		src.update_icon()
+		spawn(0) //give the stacks a chance to delete themselves if necessary
+		if (S && usr.using_object == S)
+			S.interact(usr)
+		if (src && usr.using_object == src)
+			interact(usr)
 
 /obj/item/stack/material/electronics
 	name = "electronic circuits"
@@ -165,7 +189,7 @@
 	value = 5
 
 /obj/item/stack/material/marble
-	name = "marble brick"
+	name = "marble block"
 	icon_state = "sheet-marble"
 	default_type = "marble"
 	value = 3
@@ -204,6 +228,71 @@
 	default_type = "flax"
 	value = 2
 	flammable = TRUE
+
+/obj/item/stack/material/leaf
+	name = "Leaf"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "leaves1"
+	default_type = "leaf"
+	value = 0
+	flammable = TRUE
+	var/decay = 0
+	var/decaytimer = 0
+	decay = 80*600
+
+/obj/item/stack/material/leaf/New()
+		..()
+		food_decay()
+
+/obj/item/stack/material/leaf/proc/food_decay()
+	spawn(600)
+		if (decay == 0)
+			return
+		if (istype(loc, /obj/structure/vending))
+			food_decay()
+			return
+
+		if (istype(loc, /obj/structure/closet/fridge))
+			var/obj/structure/closet/fridge/F = loc
+			if (F.powersource && F.powersource.powered)
+				decaytimer += 100 //much slower
+			else
+				decaytimer += 300
+		else if (isturf(loc) && !findtext(src.name, "canned")) //if on the floor (i.e. not stored inside something), decay faster
+			decaytimer += 600
+		else if (!istype(loc, /obj/item/weapon/can) && !findtext(src.name, "canned")) //if not canned, since canned food doesn't spoil
+			decaytimer += 300
+		if (istype(loc, /obj/item/weapon/can))
+			var/obj/item/weapon/can/C = loc
+			if (C.open)
+				decaytimer += 300
+		if (decaytimer >= decay)
+			qdel(src)
+			return
+		else
+			food_decay()
+			return
+
+/obj/item/stack/material/leaf/palm
+	name = "Palm"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "palm_leaves"
+	default_type = "palm"
+	value = 0
+	flammable = TRUE
+	decay = 80*600
+
+/obj/item/stack/material/leaf/fern
+	name = "Fern"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "fernleaf1"
+	default_type = "fern"
+	value = 0
+	flammable = TRUE
+
+/obj/item/stack/material/leaves/fern/New()
+		..()
+		icon_state = pick("fernleaves1","fernleaves2")
 
 /obj/item/stack/material/tobacco
 	name = "tobacco leaves"
@@ -290,6 +379,36 @@
 	dropsound = 'sound/effects/drop_wood.ogg'
 	value = 1
 	flammable = TRUE
+	var/onfire = FALSE
+	var/ash_production = FALSE
+
+/obj/item/stack/material/wood/proc/start_fire()
+	var/burn_time = amount * 1
+	var/old_amount = amount
+	if (onfire)
+		var/obj/effect/fire/NF = new/obj/effect/fire(src.loc)
+		spawn(burn_time)
+			for(var/i = 0, i < old_amount, i++)
+				new/obj/item/wood_ash(src.loc)
+			qdel(NF)
+			qdel(src)
+
+
+/obj/item/stack/material/wood/attackby(obj/item/T as obj, mob/user as mob)
+	if (istype(T, /obj/item/flashlight))
+		var/obj/item/flashlight/F = T
+		if(user.a_intent == "harm" && F.on && !onfire)
+
+			visible_message("<span class = 'red'>[user.name] tries to set the [src] on fire.</span>")
+			if(prob(30))
+				ash_production = 1
+				src.onfire = 1
+				start_fire()
+				visible_message("<span class = 'red'>[user.name] sets the [src] on fire.</span>")
+				return
+
+	return ..()
+
 
 /obj/item/stack/material/bamboo
 	name = "bamboo bundle"
@@ -424,6 +543,15 @@
 	desc = "A pelt from a skinned wolf."
 	icon_state = "sheet-wolfpelt"
 	default_type = "wolfpelt"
+	w_class = 2.0
+	flammable = TRUE
+	value = 3
+
+/obj/item/stack/material/pelt/wolfpelt/white
+	name = "white wolf pelt"
+	desc = "A pelt from a skinned white wolf."
+	icon_state = "sheet-whitewolfpelt"
+	default_type = "whitewolfpelt"
 	w_class = 2.0
 	flammable = TRUE
 	value = 3

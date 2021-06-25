@@ -119,7 +119,7 @@
 	var/lizard = FALSE
 	var/wolfman = FALSE
 	var/crab = FALSE
-
+	var/nationality = "none"
 	/* These are stats. They affect how fast and how well you can do certain
 	 * actions. All stats have a min (stats[stat][1]) and a max (stats[stat][2]),
 	 * but currently no stats 'deteriorate' (in the future strength will),
@@ -193,6 +193,6 @@
 	var/mob/living/simple_animal/riding_mob = null
 /*
 /mob/living/human/New()
-	if(map.ID == MAP_TRIBES)
+	if(map.ID == MAP_TRIBES || map.ID == MAP_FOUR_KINGDOMS)
 		stats.Add("magic" = list(0,100))
 	..()*/

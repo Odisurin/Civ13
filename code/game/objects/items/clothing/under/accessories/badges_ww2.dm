@@ -110,8 +110,8 @@
 	desc = "An oak knight iron cross"
 
 /obj/item/clothing/accessory/medal/german/ww2/iron_cross_knight_gold_oak
-	icon_state = "Knight_EK_gold_oaken"
-	worn_state = "Knight_EK_gold_oaken"
+	icon_state = "knight_EK_gold_oaken"
+	worn_state = "knight_EK_gold_oaken"
 	name = "Knight Iron Cross"
 	desc = "A gold oak knight iron cross"
 
@@ -287,13 +287,6 @@
 	name = "Schutze rank patch"
 	desc = "the rank of 2nd class soldier, to be sewn into the collar of a uniform."
 
-/obj/item/clothing/accessory/rank/germ_schutze
-	icon_state = "germ_schtz"
-	item_state = "germ_schtz"
-	worn_state = "germ_schtz"
-	name = "Schutze rank patch"
-	desc = "the rank of 2nd class soldier, to be sewn into the collar of a uniform."
-
 /obj/item/clothing/accessory/rank/germ_oberschutze
 	icon_state = "germ_obrschtz"
 	item_state = "germ_obrschtz"
@@ -342,6 +335,34 @@
 	worn_state = "germ_hptmn"
 	name = "Hauptmann rank patch"
 	desc = "the rank of Captain, to be sewn into the collar of a uniform."
+
+/obj/item/clothing/accessory/rank/SS_unterscharfuhrer
+	icon_state = "germ_2lt"
+	item_state = "germ_2lt"
+	worn_state = "germ_2lt"
+	name = "Untersturmfuhrer rank patch"
+	desc = "the rank of SS 2nd Lieutenant, to be sewn into the collar of a uniform."
+
+/obj/item/clothing/accessory/rank/SS_scharfuhrer
+	icon_state = "germ_grppnfher"
+	item_state = "germ_grppnfher"
+	worn_state = "germ_grppnfher"
+	name = "Scharfuhrer rank patch"
+	desc = "the rank of SS Sergeant, to be sewn into the collar of a uniform."
+
+/obj/item/clothing/accessory/rank/SS_oberscharfuhrer
+	icon_state = "germ_1lt"
+	item_state = "germ_1lt"
+	worn_state = "germ_1lt"
+	name = "Obersturmfuhrer rank patch"
+	desc = "the rank of SS 1st Lieutenant, to be sewn into the collar of a uniform."
+
+/obj/item/clothing/accessory/rank/SS_hauptsturmfuhrer
+	icon_state = "germ_hptmn"
+	item_state = "germ_hptmn"
+	worn_state = "germ_hptmn"
+	name = "Hauptsturmfuhrer rank patch"
+	desc = "the rank of SS Captain, to be sewn into the collar of a uniform."
 
 /obj/item/clothing/accessory/medal/soviet/ww2/delegate_supreme_soviet
 	icon_state = "delegate_supreme_soviet"
@@ -409,7 +430,19 @@
 	name = "Knight's Colonial Order of the Star of Italy Medal"
 	desc = "Given to members of the Italian millitary who have served in the colonies of the Kingdom of Italy, showing the rank of Knight ."
 
+/obj/item/clothing/accessory/rank/upa_lt
+	icon_state = "upa_lt"
+	item_state = "upa_lt"
+	worn_state = "upa_lt"
+	name = "Khorunzhyj rank patches"
+	desc = "the rank of Khorunzhyj, 2nd Lieutenant."
 
+/obj/item/clothing/accessory/rank/upa_sgt
+	icon_state = "upa_sgt"
+	item_state = "upa_sgt"
+	worn_state = "upa_sgt"
+	name = "Vistun rank patch"
+	desc = "the rank of Vistun, Sergeant, sleeve patches."
 // Political Party and Union Pins ----------------------------------------
 
 /obj/item/clothing/accessory/medal/pin/communist
@@ -561,7 +594,7 @@
 	icon_state = "factory_workers_union_pin"
 	worn_state = "factory_workers_union_pin"
 	name = "Factory Worker's Union Pin"
-	desc = "A Union pin signifying that the wearer supports the beliefs of working to protect and further miner's rights."
+	desc = "A Union pin signifying that the wearer supports the beliefs of working to protect and further worker's rights."
 
 /obj/item/clothing/accessory/medal/pin/worker/labour
 	icon_state = "workers_union_pin"
@@ -569,10 +602,10 @@
 	name = "Labour Worker's Union Pin"
 	desc = "A Union pin signifying that the wearer supports the beliefs of working to protect and further Labourer's rights."
 
-/obj/item/clothing/accessory/medal/pin/worker/office
+/obj/item/clothing/accessory/medal/pin/worker/medic
 	icon_state = "medics_guild_pin"
 	worn_state = "medics_guild_pin"
-	name = "Medical Worker's Union Pin"
+	name = "Medical Worker's Guild Pin"
 	desc = "A Union pin signifying that the wearer supports the beliefs of working to protect and further Medical Worker's rights."
 
 /obj/item/clothing/accessory/medal/pin/worker/office
@@ -581,13 +614,13 @@
 	name = "Office Worker's Union Pin"
 	desc = "A Union pin signifying that the wearer supports the beliefs of working to protect and further Office Worker's rights."
 
-/obj/item/clothing/accessory/medal/pin/aristocrat
+/obj/item/clothing/accessory/medal/pin/worker/aristocrat
 	icon_state = "aristocratic_league_pin"
 	worn_state = "aristocratic_league_pin"
-	name = "Aristocrat Party Pin"
-	desc = "A Political pin signifying that the wearer supports the beliefs of working to protect and further Aristocrat's rights."
+	name = "Hospitality Pin"
+	desc = "A Political pin signifying that the wearer supports the beliefs of Hospitality Worker's rights."
 
-/obj/item/clothing/accessory/medal/pin/lumberjack
+/obj/item/clothing/accessory/medal/pin/worker/lumberjack
 	icon_state = "lumberjacks_union_pin"
 	worn_state = "lumberjacks_union_pin"
 	name = "Lumberjack's Union Pin"

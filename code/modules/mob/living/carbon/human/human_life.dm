@@ -76,14 +76,18 @@
 	// update the current life tick, can be used to e.g. only do something every 4 ticks
 	life_tick++
 	if (map && map.nomads)
-		if (find_trait("Gigantism"))
-			size_multiplier = 1.3
-		else if (find_trait("Dwarfism"))
-			size_multiplier = 0.8
-		else if (find_trait("Short"))
-			size_multiplier = 0.9
-		else if (find_trait("Tall"))
-			size_multiplier = 1.1
+		if (map && map.ID == MAP_NOMADS_AFRICA || map.ID == MAP_NOMADS_DIVIDE)
+			if (s_tone <= -175)
+				size_multiplier = 0.85
+		else
+			if (find_trait("Gigantism"))
+				size_multiplier = 1.3
+			else if (find_trait("Dwarfism"))
+				size_multiplier = 0.8
+			else if (find_trait("Short"))
+				size_multiplier = 0.9
+			else if (find_trait("Tall"))
+				size_multiplier = 1.1
 	if (riding && riding_mob)
 		if (!(riding_mob in range(1,src)))
 			riding = FALSE
@@ -113,7 +117,7 @@
 		if (stats["stamina"][1] > 0)
 			stats["stamina"][1]-=3
 
-	#define HUNGER_THIRST_MULTIPLIER 0.64 //was 0.32, doubled due to demand
+	#define HUNGER_THIRST_MULTIPLIER 0.32 //was 0.32, doubled due to demand - reverted 20/01
 	if (stat != DEAD && !map.civilizations)
 		ssd_hiding(config.ssd_invisibility_timer) //makes SSD players invisible after a while
 	if (istype(buckled, /obj/structure/bed) || istype(buckled, /obj/structure/optable))
@@ -1446,6 +1450,10 @@
 						holder2.icon_state = "yamaguchi"
 					else if (original_job.is_yakuza && original_job.is_ichi)
 						holder2.icon_state = "ichiwa"
+					else if (original_job.is_samurai && original_job.is_eastern)
+						holder2.icon_state = "eastern"
+					else if (original_job.is_samurai && original_job.is_western)
+						holder2.icon_state = "western"
 					else
 						holder2.icon_state = "jp_basic"
 				if (RUSSIAN)
@@ -1476,7 +1484,9 @@
 				if (CHINESE)
 					holder2.icon_state = "roc_basic"
 				if (CIVILIAN)
-					if (original_job_title == "Civilization A Citizen")
+					if (map.ID == MAP_CAPITOL_HILL || map.ID == MAP_YELTSIN)
+						holder2.icon_state = "civ1"
+					else if (original_job_title == "Civilization A Citizen")
 						holder2.icon_state = "civ1"
 					else if (original_job_title == "Civilization B Citizen")
 						holder2.icon_state = "civ2"
@@ -1490,6 +1500,8 @@
 						holder2.icon_state = "civ6"
 					else if (original_job_title == "Nomad")
 						holder2.icon_state = ""
+					else if (original_job.is_upa && map.ID != MAP_OCCUPATION)
+						holder2.icon_state = "upa_basic"
 //					else if (original_job_title == "Outlaw")
 //						holder2.icon_state = "civ1"
 //					else if (original_job_title == "Sheriff" || original_job_title == "Deputy" )
@@ -1500,11 +1512,20 @@
 						holder2.icon_state = "sov_basic"
 			holder2.overlays.Cut()
 			if (original_job.uses_squads && squad > 0)
-				holder2.overlays += icon(holder2.icon,"squad_[squad]")
+				if (faction_text == CIVILIAN && map.ID == MAP_OCCUPATION)
+					holder2.icon_state = ""
+				else
+					holder2.overlays += icon(holder2.icon,"squad_[squad]")
 			if (original_job.is_commander)
-				holder2.overlays += icon(holder2.icon,"commander")
+				if (faction_text == CIVILIAN && map.ID == MAP_OCCUPATION)
+					holder2.icon_state = ""
+				else
+					holder2.overlays += icon(holder2.icon,"commander")
 			else if (original_job.is_officer || original_job.is_squad_leader)
-				holder2.overlays += icon(holder2.icon,"officer")
+				if (faction_text == CIVILIAN && map.ID == MAP_OCCUPATION)
+					holder2.icon_state = ""
+				else
+					holder2.overlays += icon(holder2.icon,"officer")
 			else if (original_job.is_medic)
 				holder2.overlays += icon(holder2.icon,"medic")
 			hud_list[BASE_FACTION] = holder2
@@ -1573,7 +1594,7 @@
 		return
 
 /mob/living/human/proc/do_rotting()
-	if (map && !map.civilizations && !istype(src, /mob/living/human/corpse))
+	if (map && !map.civilizations && !map.is_zombie && !istype(src, /mob/living/human/corpse))
 		return
 	spawn(600)
 		if (stat == DEAD)
@@ -1593,7 +1614,7 @@
 									for (var/obj/item/organ/external/head/H in organs)
 										found = TRUE
 										break
-									if ((map.ID == MAP_NOMADS_WASTELAND_2 || map.ID == MAP_PIONEERS_WASTELAND_2) && found)
+									if ((map.is_zombie) && found)
 										var/mob/living/simple_animal/hostile/zombie/playerzombie //make a var for the zombie
 										playerzombie = new /mob/living/simple_animal/hostile/zombie/ //make a zombie!
 										//transferring vars.

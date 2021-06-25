@@ -23,6 +23,9 @@
 	universal_speak = FALSE		//No, just no.
 	var/meat_amount = FALSE
 	var/meat_type
+	var/fat_extra = 0
+	var/fat_penalty = 0
+	var/has_fat = TRUE //Does this animal drops fat?
 	var/stop_automated_movement = FALSE //Use this to temporarely stop random movement or to if you write special movement code for animals.
 	var/wander = TRUE	// Does the mob wander around when idle?
 	var/stop_automated_movement_when_pulled = TRUE //When set to TRUE this stops the animal from moving when someone is pulling it.
@@ -61,8 +64,6 @@
 	var/behaviour = "wander" ///wander: go around randomly. scared: run from humans-predators, default to wander after. hunt: move towards prey areas. defends: will attack only if attacked
 
 	var/simplehunger = 1000
-
-	var/removed_from_list = FALSE //this is fucking stupid. But I have to do it because the death() proc runs 30 times or some shit. Thx BYOND -Taislin
 
 	//hostile mob stuff
 	var/stance = HOSTILE_STANCE_IDLE	//Used to determine behavior
@@ -502,6 +503,12 @@
 					if (namt <= 0)
 						namt = 1
 					if (!istype(src, /mob/living/simple_animal/crab))
+						if(src.has_fat)
+							var/fat_calc = (namt + fat_extra) - fat_penalty
+							if(!fat_calc <= 0)
+								for (var/i=0, i<=fat_calc, i++) //Fat drop
+									var/obj/item/weapon/reagent_containers/food/snacks/animalfat/fat = new/obj/item/weapon/reagent_containers/food/snacks/animalfat(get_turf(src))
+									fat.name = "[name] fat"
 						if (istype(src, /mob/living/simple_animal/hostile/zombie))
 							for (var/i=0, i<=namt, i++)
 								var/obj/item/weapon/reagent_containers/food/snacks/meat/meat = new/obj/item/weapon/reagent_containers/food/snacks/meat(get_turf(src))
@@ -623,9 +630,18 @@
 				else if (istype(src, /mob/living/simple_animal/hostile/wolf))
 					var/obj/item/stack/material/pelt/wolfpelt/NP = new/obj/item/stack/material/pelt/wolfpelt(get_turf(src))
 					NP.amount = 4
+				else if (istype(src, /mob/living/simple_animal/hostile/wolf/white))
+					var/obj/item/stack/material/pelt/wolfpelt/white/NP = new/obj/item/stack/material/pelt/wolfpelt/white(get_turf(src))
+					NP.amount = 4
 				else if (istype(src, /mob/living/simple_animal/monkey))
 					var/obj/item/stack/material/pelt/monkeypelt/NP = new/obj/item/stack/material/pelt/monkeypelt(get_turf(src))
 					NP.amount = 3
+				else if (istype(src, /mob/living/simple_animal/hostile/gorilla))
+					var/obj/item/stack/material/pelt/gorillapelt/NP = new/obj/item/stack/material/pelt/gorillapelt(get_turf(src))
+					NP.amount = 3
+				else if (istype(src, /mob/living/simple_animal/hostile/gorilla/gigantopithecus))
+					var/obj/item/stack/material/pelt/gorillapelt/NP = new/obj/item/stack/material/pelt/gorillapelt(get_turf(src))
+					NP.amount = 6
 				else if (istype(src, /mob/living/simple_animal/hostile/fox/arctic))
 					var/obj/item/stack/material/pelt/foxpelt/white/NP = new/obj/item/stack/material/pelt/foxpelt/white(get_turf(src))
 					NP.amount = 3
@@ -955,7 +971,10 @@
 					new/obj/item/weapon/reagent_containers/food/snacks/poo/animal(src.loc)
 				simplehunger += 500
 				adjustBruteLoss(-4)
-				qdel(SD)
+				if(SD.amount >= 2)
+					SD.amount -= 1
+				else
+					qdel(SD)
 				return
 		for(var/obj/structure/farming/plant/PL in range(2,src))
 			if (prob(15))

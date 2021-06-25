@@ -54,9 +54,12 @@ var/global/list/round_voters = list() //Keeps track of the individuals voting fo
 						C << browse(vote.interface(C),"window=vote")
 
 	proc/autogamemode()
-		if (map.ID == MAP_GLADIATORS || map.ID == MAP_ALLEYWAY || map.ID == MAP_FOOTBALL || map.ID == MAP_NOMADS_EXTENDED || map.ID == MAP_CIVILIZATIONS || map.ID == MAP_TRIBES || map.ID == MAP_JUNGLE_OF_THE_CHADS || map.ID == MAP_NOMADS_WASTELAND || map.ID == MAP_NOMADS_WASTELAND_2 || map.ID == MAP_TESTING || map.battleroyale || map.ID == MAP_THE_ART_OF_THE_DEAL)
+		if (map.ID == MAP_NATIONSRP || map.ID == MAP_GLADIATORS || map.ID == MAP_ALLEYWAY || map.ID == MAP_FOOTBALL || map.ID == MAP_NOMADS_EXTENDED || map.ID == MAP_CIVILIZATIONS || map.ID == MAP_TRIBES || map.ID == MAP_JUNGLE_OF_THE_CHADS || map.ID == MAP_NOMADS_WASTELAND || map.ID == MAP_NOMADS_WASTELAND_2 || map.ID == MAP_TESTING || map.battleroyale || map.ID == MAP_THE_ART_OF_THE_DEAL || map.ID == MAP_FOUR_KINGDOMS)
 			return
 		if (map.persistence)
+			return
+		if (map.ID == MAP_CAPITOL_HILL || map.ID == MAP_YELTSIN)
+			initiate_vote("gamemode","the server", TRUE)
 			return
 		if (!map.is_RP && autogamemode_triggered == FALSE)
 			initiate_vote("gamemode","the server", TRUE)
@@ -112,16 +115,17 @@ var/global/list/round_voters = list() //Keeps track of the individuals voting fo
 				text = "<b>Vote Tied Between:</b>\n"
 				for (var/option in winners)
 					text += "\t[option]\n"
-			. = pick(winners)
+			var/newwinner = pick(winners)
+			. = newwinner
 
 			for (var/key in current_votes)
-				if (choices[current_votes[key]] == .)
+				if (choices[current_votes[key]] == newwinner)
 					round_voters += key // Keep track of who voted for the winning round.
-			text += "<b>Vote Result: <span class = 'ping'>[.]</span></b><br>"
+			text += "<b>Vote Result: <span class = 'ping'>[newwinner]</span></b><br>"
 			text += "<b>The vote has ended. </b>"
 			if (callback)
 				if (callback.len == 2)
-					call(callback[1], callback[2])(.)
+					call(callback[1], callback[2])(newwinner)
 				callback = null
 		else
 			text += "<b>Vote Result: <span class = 'ping'>No</span> - Not enough YES votes (75% is needed)</b>"
@@ -218,7 +222,11 @@ var/global/list/round_voters = list() //Keeps track of the individuals voting fo
 						choices.Add("No")
 				if ("gamemode")
 					var/list/options = list()
-					if (!map.is_RP && !map.nomads && !map.civilizations)
+					if (map.ID == MAP_CAPITOL_HILL || map.ID == MAP_YELTSIN)
+						options = list("Protect the VIP", "Siege",/* "Area Capture",*/ "Kills")
+						if (!default)
+							default = "Siege"
+					else if (!map.is_RP && !map.nomads && !map.civilizations)
 						options = list("Normal", "Competitive", "Hardcore")
 						if (!default)
 							default = "Normal"
@@ -227,6 +235,7 @@ var/global/list/round_voters = list() //Keeps track of the individuals voting fo
 						if (!default)
 							default = "Classic (Stone Age Start)"
 					choices.Add(options)
+
 				else
 					return FALSE
 			mode = vote_type

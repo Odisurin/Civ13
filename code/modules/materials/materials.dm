@@ -260,7 +260,7 @@ var/list/name_to_material
 
 /material/hemp
 	name = "hemp"
-	icon_colour = "#FFFFFE"
+	icon_colour = "#32cd32" //lime green
 	hardness = 10
 	cut_delay = 5
 	shard_type = null
@@ -272,7 +272,7 @@ var/list/name_to_material
 
 /material/flax
 	name = "flax"
-	icon_colour = "#5f9ea0"
+	icon_colour = "#5f9ea0" //desaturated dark cyan.
 	hardness = 10
 	cut_delay = 5
 	shard_type = null
@@ -282,6 +282,28 @@ var/list/name_to_material
 	stack_type = /obj/item/stack/material/flax
 	flags = MATERIAL_UNMELTABLE
 
+/material/leaf
+	name = "leaf"
+	icon_colour = "#556b2f" // dark olive-green
+	hardness = 10
+	cut_delay = 5
+	shard_type = null
+	tableslam_noise = null
+	sheet_singular_name = "bundle"
+	sheet_plural_name = "bundles"
+	stack_type = /obj/item/stack/material/leaf
+	flags = MATERIAL_UNMELTABLE
+
+/material/leaf/palm
+	name = "palm"
+	icon_colour = "#adff2f" //green yellow
+	stack_type = /obj/item/stack/material/leaf/palm
+
+/material/leaf/fern
+	name = "fern"
+	icon_colour = "#006400" //dark green
+	stack_type = /obj/item/stack/material/leaf/fern
+
 /material/coca
 	name = "coca"
 	icon_colour = "#faeff1"
@@ -289,7 +311,7 @@ var/list/name_to_material
 	cut_delay = 5
 	shard_type = null
 	tableslam_noise = null
-	sheet_singular_name = "leave"
+	sheet_singular_name = "leaf"
 	sheet_plural_name = "leaves"
 	stack_type = /obj/item/stack/material/coca
 	flags = MATERIAL_UNMELTABLE
@@ -452,6 +474,7 @@ var/list/name_to_material
 	dooropen_noise = 'sound/effects/doorcreaky.ogg'
 	stack_type = /obj/item/stack/material/bone
 
+/*
 /material/stone/marble
 	name = "marble"
 	icon_colour = "#fffcf0" // marble - white
@@ -459,6 +482,20 @@ var/list/name_to_material
 	integrity = 201 //hack to stop kitchen benches being flippable, todo: refactor into weight system
 	hardness = 100
 	door_icon_base = "stone"
+	stack_type = /obj/item/stack/material/marble
+*/
+
+/material/marble
+	name = "marble"
+	icon_base = "new_stonebrick"
+	icon_colour = "#fffcf0" // marble - white
+	hardness = 45
+	integrity = 500
+	weight = 22
+	shard_type = SHARD_STONE_PIECE
+	door_icon_base = "stone"
+	sheet_singular_name = "block"
+	sheet_plural_name = "blocks"
 	stack_type = /obj/item/stack/material/marble
 
 /material/steel
@@ -687,7 +724,7 @@ var/list/name_to_material
 /material/bearpelt/white
 	name = "whitebearpelt"
 	use_name = "white bear"
-	icon_colour = "#8C7E6E"
+	icon_colour = "#e8e8e8" // "white smoke"
 	hardness = 30
 	sheet_singular_name = "pelt"
 	sheet_plural_name = "pelts"
@@ -710,6 +747,15 @@ var/list/name_to_material
 	sheet_singular_name = "pelt"
 	sheet_plural_name = "pelts"
 	stack_type = /obj/item/stack/material/pelt/wolfpelt
+
+/material/whitewolfpelt
+	name = "white wolfpelt"
+	use_name = "wolf"
+	icon_colour = "#e8e8e8" // "white smoke"
+	hardness = 30
+	sheet_singular_name = "pelt"
+	sheet_plural_name = "pelts"
+	stack_type = /obj/item/stack/material/pelt/wolfpelt/white
 
 /material/catpelt
 	name = "catpelt"
@@ -777,7 +823,7 @@ var/list/name_to_material
 /material/whitefoxpelt
 	name = "whitefoxpelt"
 	use_name = "white fox"
-	icon_colour = "#8C7E6E"
+	icon_colour = "#e8e8e8" // "white smoke"
 	hardness = 30
 	sheet_singular_name = "pelt"
 	sheet_plural_name = "pelts"

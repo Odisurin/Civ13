@@ -7,17 +7,17 @@
 
 		// small body parts: head, hand, feet
 		"small" = list(
-			SHORT_RANGE_STILL = 73,
-			SHORT_RANGE_MOVING = 48,
+			SHORT_RANGE_STILL = 63,
+			SHORT_RANGE_MOVING = 38,
 
-			MEDIUM_RANGE_STILL = 63,
-			MEDIUM_RANGE_MOVING = 42,
+			MEDIUM_RANGE_STILL = 53,
+			MEDIUM_RANGE_MOVING = 32,
 
-			LONG_RANGE_STILL = 53,
-			LONG_RANGE_MOVING = 35,
+			LONG_RANGE_STILL = 43,
+			LONG_RANGE_MOVING = 25,
 
-			VERY_LONG_RANGE_STILL = 43,
-			VERY_LONG_RANGE_MOVING = 28),
+			VERY_LONG_RANGE_STILL = 33,
+			VERY_LONG_RANGE_MOVING = 18),
 
 		// medium body parts: limbs
 		"medium" = list(
@@ -126,6 +126,7 @@
 	ammo_type = /obj/item/ammo_casing/a762x54
 	slot_flags = SLOT_SHOULDER
 	magazine_type = /obj/item/ammo_magazine/svt
+	good_mags = list(/obj/item/ammo_magazine/svt)
 	weight = 3.85
 	load_delay = 8
 	firemodes = list(
@@ -151,6 +152,7 @@
 	ammo_type = /obj/item/ammo_casing/a65x50
 	slot_flags = SLOT_SHOULDER
 	magazine_type = /obj/item/ammo_magazine/avtomat
+	good_mags = list(/obj/item/ammo_magazine/avtomat)
 	weight = 3.85
 	load_delay = 8
 	firemodes = list(
@@ -199,6 +201,7 @@
 	damage_modifier = 1.2
 	slot_flags = SLOT_SHOULDER
 	magazine_type = /obj/item/ammo_magazine/sks
+	good_mags = list(/obj/item/ammo_magazine/sks)
 	weight = 3.85
 	firemodes = list(
 		list(name="single shot",burst=1, move_delay=2, fire_delay=4)
@@ -225,6 +228,7 @@
 	fire_sound = 'sound/weapons/guns/fire/SVD.ogg'
 	slot_flags = SLOT_SHOULDER
 	magazine_type = /obj/item/ammo_magazine/svd
+	good_mags = list(/obj/item/ammo_magazine/svd)
 	weight = 3.85
 	firemodes = list(
 		list(name="single shot",burst=1, move_delay=2, fire_delay=8)
@@ -255,6 +259,7 @@
 	slot_flags = SLOT_SHOULDER
 	ammo_type = /obj/item/ammo_casing/a792x57
 	magazine_type = /obj/item/ammo_magazine/gewehr98
+	good_mags = list(/obj/item/ammo_magazine/gewehr98)
 	weight = 4.9
 	firemodes = list(
 		list(name="single shot",burst=1, move_delay=2, fire_delay=6)
@@ -279,6 +284,7 @@
 	slot_flags = SLOT_SHOULDER
 	ammo_type = /obj/item/ammo_casing/a792x57
 	magazine_type = /obj/item/ammo_magazine/g43
+	good_mags = list(/obj/item/ammo_magazine/g43, /obj/item/ammo_magazine/gewehr98)
 	weight = 4.9
 	firemodes = list(
 		list(name="single shot",burst=1, move_delay=2, fire_delay=6)
@@ -302,6 +308,7 @@
 	slot_flags = SLOT_SHOULDER
 	ammo_type = /obj/item/ammo_casing/a3006
 	magazine_type = /obj/item/ammo_magazine/garand
+	good_mags = list(/obj/item/ammo_magazine/garand)
 	reload_sound = 'sound/weapons/guns/interact/GarandLoad.ogg'
 	unload_sound = 'sound/weapons/guns/interact/GarandUnload.ogg'
 	weight = 4.9
@@ -311,7 +318,7 @@
 	force = 10
 	throwforce = 20
 	attachment_slots = ATTACH_SILENCER|ATTACH_IRONSIGHTS|ATTACH_BARREL
-	effectiveness_mod = 1.01
+	effectiveness_mod = 0.95
 
 /obj/item/weapon/gun/projectile/semiautomatic/ar15
 	name = "Bushmaster XM-15"
@@ -328,6 +335,7 @@
 	slot_flags = SLOT_SHOULDER
 	ammo_type = /obj/item/ammo_casing/a556x45
 	magazine_type = /obj/item/ammo_magazine/m16
+	good_mags = list(/obj/item/ammo_magazine/m16)
 	weight = 4.9
 	firemodes = list(
 		list(name="single shot",burst=1, move_delay=2, fire_delay=6)

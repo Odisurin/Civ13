@@ -180,6 +180,11 @@
 /obj/structure/barricade/steel
 	material = "steel"
 	material_name = "steel"
+	name = "steel barrier"
+	desc = "A sturdy steel construction."
+	flammable = FALSE
+	protection_chance = 90
+
 /obj/structure/barricade/steel/New(_loc)
 	..(_loc)
 
@@ -408,7 +413,19 @@
 	maxhealth = 2709
 	material_name = "steel"
 	protection_chance = 50
-
+/obj/structure/barricade/debris
+	name = "debris"
+	desc = "A wall of rubble and debris."
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "debris1"
+	material = "stone"
+	health = 300
+	maxhealth = 300
+	material_name = "stone"
+	protection_chance = 90
+	New()
+		..()
+		icon_state = "debris[rand(1,3)]"
 /obj/structure/barricade/stone_h
 	name = "stone wall"
 	desc = "A wall of stone blocks."

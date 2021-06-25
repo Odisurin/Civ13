@@ -5,6 +5,7 @@
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall)
 	respawn_delay = 3000
 	is_singlefaction = TRUE
+	has_hunger = TRUE
 	no_winner ="The fighting is still going."
 	songs = list(
 		"Woke Up This Morning:1" = 'sound/music/woke_up_this_morning.ogg',)
@@ -71,25 +72,30 @@
 	custom_civs += newnamed
 	custom_civs += newnamee
 	custom_civs += newnamef
-//	spawn(15000)
-//		spawn_disks(TRUE)
+	spawn(15000)
+		spawn_disks(TRUE)
 	spawn(100)
 		refill_marketplace(TRUE)
 		assign_precursors()
 	spawn(150)
 		assign_delivery_zones()
 		send_buy_orders()
+								//id = seller, obj, amt, price, type, id, active
+		map.globalmarketplace += list("red1" = list("Rednikov Industries",null,1,1000,"bank","red1",1))
+		map.globalmarketplace += list("blue1" = list("Giovanni Blu Stocks",null,1,1000,"bank","blue1",1))
+		map.globalmarketplace += list("green1" = list("Kogama Kraftsmen",null,1,1000,"bank","green1",1))
+		map.globalmarketplace += list("yellow1" = list("Goldstein Solutions",null,1,1000,"bank","yellow1",1))
 /obj/map_metadata/art_of_the_deal/proc/assign_delivery_zones()
 	for(var/turf/floor/delivery/D in turfs)
 		var/list/tlist = list(list(D.name,D.x,D.y,D.get_coded_loc()))
 		delivery_locations += tlist
 /obj/map_metadata/art_of_the_deal/proc/send_buy_orders()
-	for(var/i in list("mail@greene.ug","mail@rednikov.ug","mail@goldstein.ug","mail@blu.ug"))
+	for(var/i in list("mail@kogama.ug","mail@rednikov.ug","mail@goldstein.ug","mail@blu.ug"))
 		var/list/tloc = pick(delivery_locations)
 		var/nr = pick(3,7)
 		var/comps = ""
 		switch(i)
-			if ("mail@greene.ug")
+			if ("mail@kogama.ug")
 				comps = pick("GBSA-1994 chip","RDKV S-445 chip","GS-IC-M3 chip")
 			if ("mail@rednikov.ug")
 				comps = pick("GBSA-1994 chip","McGT S5R1 chip","GS-IC-M3 chip")
@@ -97,7 +103,7 @@
 				comps = pick("GBSA-1994 chip","McGT S5R1 chip","RDKV S-445 chip")
 			if ("mail@blu.ug")
 				comps = pick("McGT S5R1 chip","RDKV S-445 chip","GS-IC-M3 chip")
-		var/pay = nr*rand(500,700)
+		var/pay = nr*rand(500,1100)
 		var/list/tlist = list(list(tloc[2],tloc[3],comps,nr,pay,i)) //x,y,product,amount,payment,faction
 		delivery_orders += tlist
 		var/needed = "[nr] [comps]s at the [tloc[4]] [tloc[1]] postbox ([tloc[2]],[tloc[3]])"
@@ -123,6 +129,12 @@
 /obj/map_metadata/art_of_the_deal/job_enabled_specialcheck(var/datum/job/J)
 	if (J.is_deal)
 		. = TRUE
+		if (clients.len <= 15)
+			if (J.title == "Paramedic" || J.title == "Legitimate Business")
+				. = FALSE
+		if (clients.len <= 25)
+			if (J.title == "Mechanic" || J.title == "Homeless Man")
+				. = FALSE
 	else
 		. = FALSE
 
@@ -164,8 +176,8 @@
 						new/obj/item/weapon/disk/blue(SF.loc)
 						new/obj/item/weapon/disk/blue/fake(SF.loc)
 					else
-						new/obj/item/weapon/disk/red(SF)
-						new/obj/item/weapon/disk/red/fake(SF)
+						new/obj/item/weapon/disk/blue(SF)
+						new/obj/item/weapon/disk/blue/fake(SF)
 				if ("Kogama Kraftsmen")
 					if (SF.opened)
 						new/obj/item/weapon/disk/green(SF.loc)
@@ -202,8 +214,10 @@
 		var/chosen1 = pick(chosen)
 		if (ispath(chosen1[1]))
 			var/pt = chosen1[1]
-			var/obj/item/weapon/gun/projectile/ST = new pt(locate(1,1,1))
-			ST.serial = ""
+			var/obj/item/ST = new pt(locate(1,1,1))
+			if (istype(ST, /obj/item/weapon/gun/projectile))
+				var/obj/item/weapon/gun/projectile/PJ = ST
+				PJ.serial = ""
 			map.globalmarketplace += list("[idx]" = list("Anonymous",ST,1,chosen1[2],"deepnet","[idx]",1))
 			ST.forceMove(locate(0,0,0))
 	var/num = rand(1,2) //equipment
@@ -283,6 +297,7 @@
 		/obj/item/flashlight/flashlight = 10,
 		/obj/item/ammo_magazine/emptyspeedloader = 20,
 		/obj/item/weapon/handcuffs/rope = 50,
+		/obj/item/weapon/material/kitchen/utensil/knife/shank/iron = 10,
 	)
 /obj/structure/vending/undercover_apparel
 	name = "undercover apparel"
@@ -306,6 +321,7 @@
 		/obj/item/weapon/storage/briefcase = 10,
 		/obj/item/clothing/accessory/holster/armpit = 10,
 		/obj/item/clothing/accessory/holster/chest = 10,
+		/obj/item/weapon/material/kitchen/utensil/knife/shank/iron = 10,
 	)
 	attack_hand(mob/user as mob)
 		if (user.original_job_title == "Police Officer")
@@ -329,8 +345,11 @@
 		/obj/item/ammo_magazine/colthammerless/a380acp = 20,
 		/obj/item/ammo_magazine/m1911 = 20,
 		/obj/item/ammo_magazine/c32 = 10,
+		/obj/item/clothing/accessory/armor/nomads/civiliankevlar = 5,
 	)
 	prices = list(
+		/obj/item/clothing/accessory/armor/nomads/civiliankevlar = 1000,
+
 		/obj/item/weapon/gun/projectile/pistol/colthammerless = 300,
 		/obj/item/weapon/gun/projectile/pistol/colthammerless/m1908 = 300,
 		/obj/item/weapon/gun/projectile/pistol/m1911 = 400,
@@ -372,12 +391,14 @@
 		/obj/item/clothing/head/helmet/swat = 15,
 		/obj/item/clothing/mask/gas/swat = 15,
 		/obj/item/clothing/suit/police = 15,
+		/obj/item/clothing/suit/storage/jacket/highvis = 15,
 		/obj/item/clothing/head/helmet/constable = 15,
 		/obj/item/clothing/under/constable = 15,
 		/obj/item/clothing/shoes/swat = 15,
 		/obj/item/weapon/storage/backpack/civbag = 15,
 		/obj/item/weapon/melee/nightbaton = 15,
 		/obj/item/weapon/storage/box/handcuffs = 10,
+		/obj/item/weapon/attachment/scope/adjustable/binoculars/binoculars = 15,
 	)
 	attack_hand(mob/user as mob)
 		if (user.original_job_title == "Police Officer")
@@ -387,19 +408,20 @@
 		 return
 
 /obj/structure/vending/police_weapons
-	name = "police weapons"
+	name = "lethal police weapons"
 	desc = "When the baton is not enough."
 	icon_state = "weapons_sof"
 	products = list(
 	/obj/item/weapon/gun/projectile/shotgun/remington870 = 10,
-	/obj/item/ammo_magazine/shellbox/rubber = 10,
+	/obj/item/ammo_magazine/shellbox/slug = 10,
 	/obj/item/ammo_magazine/shellbox = 10,
-	/obj/item/weapon/gun/projectile/pistol/glock17 = 20,
 	/obj/item/ammo_magazine/glock17 = 50,
-	/obj/item/weapon/gun/launcher/grenadelauncher/M79 = 5,
-	/obj/item/ammo_casing/grenade_l/teargas = 20,
-	/obj/item/weapon/grenade/flashbang = 20,
-
+	/obj/item/ammo_magazine/m9beretta = 50,
+	/obj/item/ammo_magazine/c32 = 50,
+	/obj/item/ammo_magazine/c44 = 50,
+	/obj/item/weapon/gun/projectile/boltaction/m24 = 10,
+	/obj/item/ammo_magazine/m24 = 20,
+	/obj/item/weapon/attachment/scope/adjustable/sniper_scope = 10,
 	)
 	attack_hand(mob/user as mob)
 		if (user.original_job_title == "Police Officer")
@@ -408,6 +430,31 @@
 		 user << "You do not have access to this."
 		 return
 
+/obj/structure/vending/police_weapons/ltl
+	name = "less than lethal police weapons"
+	desc = "Baton +."
+	icon_state = "equipment_usa"
+	products = list(
+	/obj/item/weapon/gun/projectile/shotgun/remington870 = 10,
+	/obj/item/ammo_magazine/shellbox/rubber = 10,
+	/obj/item/ammo_magazine/shellbox/beanbag = 10,
+	/obj/item/weapon/gun/launcher/grenadelauncher/M79 = 5,
+	/obj/item/ammo_casing/grenade_l/teargas = 20,
+	/obj/item/weapon/grenade/flashbang = 20,
+	/obj/item/weapon/grenade/chemical/xylyl_bromide = 10,
+	/obj/item/weapon/grenade/smokebomb/m18smoke = 10,
+	/obj/item/weapon/reagent_containers/spray/pepper = 10,
+	/obj/item/weapon/gun/projectile/dartgun/mag = 10,
+	/obj/item/ammo_magazine/chemdart/mag = 20,
+	/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate = 10,
+	/obj/item/ammo_magazine/tt30ll = 50,
+	)
+	attack_hand(mob/user as mob)
+		if (user.original_job_title == "Police Officer")
+			..()
+		else
+		 user << "You do not have access to this."
+		 return
 /obj/item/weapon/package
 	name = "package"
 	desc = "Some kind of package."
@@ -521,14 +568,14 @@
 	if (findtext(name, "Officer"))
 		real_name = replacetext(real_name, "Officer ", "")
 		hidden_name = real_name
-		var/chosen_name = WWinput(src, "Which ethnicity do you want your name to be?","Choose Name","Cancel",list("Cancel","Russian","Jewish","Italian","Irish"))
+		var/chosen_name = WWinput(src, "Which ethnicity do you want your name to be?","Choose Name","Cancel",list("Cancel","Russian","Jewish","Italian","Japanese"))
 		switch(chosen_name)
 			if ("Cancel")
 				return
 			if ("Russian")
 				chosen_name =  species.get_random_russian_name(gender)
-			if ("Irish")
-				chosen_name =  species.get_random_gaelic_name(gender)
+			if ("Japanese")
+				chosen_name =  species.get_random_japanese_name(gender)
 			if ("Italian")
 				chosen_name =  species.get_random_italian_name(gender)
 			if ("Jewish")
@@ -561,7 +608,6 @@
 	showoff(user)
 
 /mob/living/human/var/gun_permit = FALSE
-
 /////////////////////////delivery points//////////////////////
 /turf/floor/delivery
 	name = "delivery area"
@@ -595,7 +641,7 @@
 				//x,y,product,amount,payment,factionmail
 				var/faction
 				switch(i[6])
-					if ("mail@greene.ug")
+					if ("mail@kogama.ug")
 						faction = "Kogama Kraftsmen"
 					if ("mail@rednikov.ug")
 						faction = "Rednikov Industries"

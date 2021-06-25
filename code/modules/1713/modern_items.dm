@@ -610,6 +610,22 @@
 					if (volume_di+volume_et > maxvolume)
 						volume_et = maxvolume-volume_di
 					return
+			else if (C.reagents.has_reagent("fat_oil",1))
+				var/barrelamt = C.reagents.get_reagent_amount("fat_oil")
+				if (barrelamt < (maxvolume-volume_di))
+					C.reagents.remove_reagent("fat_oil",barrelamt)
+					volume_di += barrelamt
+					visible_message("[H] pours \the [W] into \the [src].","You pour [barrelamt] units of olive oil from \the [W] into \the [src].")
+					if (volume_di+volume_et > maxvolume)
+						volume_di = maxvolume-volume_et
+					return
+				else
+					C.reagents.remove_reagent("fat_oil",(maxvolume-volume_di))
+					volume_di += (maxvolume-volume_di)
+					visible_message("[H] pours \the [W] into \the [src].","You pour [maxvolume-volume] units of olive oil from \the [W] into \the [src].")
+					if (volume_di+volume_et > maxvolume)
+						volume_di = maxvolume-volume_et
+					return
 			else
 				H << "<span class = 'notice'>This [W] has no biofuel percursors in it!</span>"
 				return
@@ -919,3 +935,56 @@
 	..()
 	storage.attackby(W, user)
 	update_icon()
+/////////////////////////////////////////////////////////////////////////////////Katana Wall Stand////////////////////////
+/obj/structure/katana_stand
+	name = "katana display"
+	desc = "A display for a katana mounted to a wall."
+	icon = 'icons/obj/modern_structures.dmi'
+	icon_state = "katana_stand"
+	flammable = FALSE
+	not_movable = TRUE
+	not_disassemblable = TRUE
+	anchored = TRUE
+	density = FALSE
+	opacity = FALSE
+	var/obj/item/weapon/storage/internal/storage
+	var/max_storage = 1
+	New()
+		..()
+		storage.can_hold = list(/obj/item/clothing/accessory/storage/sheath/katana, /obj/item/clothing/accessory/storage/sheath/katana/full, /obj/item/weapon/material/sword/katana)
+/obj/item/weapon/storage/bag/trash/update_icon()
+	if (contents.len == FALSE)
+		icon_state = "katana_stand"
+	else if (contents.len >= 1)
+		icon_state = "katana_stand1"
+
+/obj/structure/katana_stand/New()
+	..()
+	storage = new/obj/item/weapon/storage/internal(src)
+	storage.storage_slots = max_storage
+	storage.max_w_class = 3
+	storage.max_storage_space = max_storage*3
+	update_icon()
+/obj/structure/katana_stand/Destroy()
+	qdel(storage)
+	storage = null
+	..()
+
+/obj/structure/katana_stand/attack_hand(mob/user as mob)
+	if (istype(user, /mob/living/human) && user in range(1,src))
+		storage.open(user)
+		update_icon()
+	else
+		return
+/obj/structure/katana_stand/MouseDrop(obj/over_object as obj)
+	if (storage.handle_mousedrop(usr, over_object))
+		..(over_object)
+		update_icon()
+/obj/structure/katana_stand/attackby(obj/item/W as obj, mob/user as mob)
+	..()
+	storage.attackby(W, user)
+	update_icon()
+/obj/structure/katana_stand/full
+/obj/structure/katana_stand/full/New()
+	..()
+	new /obj/item/weapon/material/sword/katana(src)

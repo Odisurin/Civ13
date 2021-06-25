@@ -8,7 +8,8 @@
 	var/handle_casings = EJECT_CASINGS	//determines how spent casings should be handled
 	var/load_method = SINGLE_CASING|SPEEDLOADER //1 = Single shells, 2 = box or quick loader, 3 = magazine
 	var/obj/item/ammo_casing/chambered = null
-
+	var/is_hmg = FALSE
+	var/has_telescopic = FALSE
 	//gunporn stuff
 	var/unload_sound 	= 'sound/weapons/guns/interact/pistol_magout.ogg'
 	var/reload_sound 	= 'sound/weapons/guns/interact/pistol_magin.ogg'
@@ -22,7 +23,8 @@
 
 	//For MAGAZINE guns
 	var/magazine_type = null	//the type of magazine that the gun comes preloaded with
-	var/list/bad_magazine_types = list() // list of magazine types that we can't use
+	var/list/good_mags = list() //List of extra compatible mags
+	var/list/bad_magazine_types = list(/obj/item/ammo_magazine) // list of magazine types that we can't use
 	var/obj/item/ammo_magazine/ammo_magazine = null //stored magazine
 	var/auto_eject = FALSE			//if the magazine should automatically eject itself when empty.
 	var/auto_eject_sound = null
@@ -58,9 +60,15 @@
 			ammo_magazine = new magazine_type(src)
 
 	update_icon()
-
-	var/obj/item/weapon/attachment/A = new /obj/item/weapon/attachment/scope/iron_sights(src)
-	spawn_add_attachment(A, src)
+	if (is_hmg == TRUE && has_telescopic == FALSE)
+		var/obj/item/weapon/attachment/scope/iron_sights/mg/A = new /obj/item/weapon/attachment/scope/iron_sights/mg(src)
+		spawn_add_attachment(A, src)
+	else if (has_telescopic == TRUE)
+		var/obj/item/weapon/attachment/scope/iron_sights/mg/type99/A = new /obj/item/weapon/attachment/scope/iron_sights/mg/type99(src)
+		spawn_add_attachment(A, src)
+	else
+		var/obj/item/weapon/attachment/A = new /obj/item/weapon/attachment/scope/iron_sights(src)
+		spawn_add_attachment(A, src)
 
 /obj/item/weapon/gun/projectile/proc/cock_gun(mob/user)
 	set waitfor = FALSE
@@ -179,8 +187,9 @@
 
 		if (!(load_method & AM.mag_type) || caliber != AM.caliber)
 			return // incompatible
-
 		if (bad_magazine_types.Find(AM.type))
+			return //incompatible
+		else if (!(load_method & AM.mag_type != SPEEDLOADER) && !good_mags.Find(AM.type))
 			return // incompatible
 
 		switch(AM.mag_type)
@@ -270,7 +279,10 @@
 /obj/item/weapon/gun/projectile/attackby(var/obj/item/A as obj, mob/user)
 	..()
 	if (istype(A, /obj/item/ammo_magazine) || istype(A, /obj/item/ammo_casing))
-		load_ammo(A, user)
+		if (istype(A, /obj/item/ammo_magazine) && !magazine_type)
+			return
+		else
+			load_ammo(A, user)
 
 /obj/item/weapon/gun/projectile/attack_self(mob/user as mob)
 	if (firemodes.len > 1)

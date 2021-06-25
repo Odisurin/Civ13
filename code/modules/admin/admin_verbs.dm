@@ -107,6 +107,8 @@ var/list/admin_verbs_fun = list(
 	/client/proc/cmd_admin_crush_self,
 	/client/proc/drop_bomb,
 	/client/proc/radiation_emission,
+	/datum/admins/proc/fantasy_races,
+	/datum/admins/proc/zombiemechanic,
 	/client/proc/nuke,
 	/client/proc/make_sound,
 	/client/proc/editappear,
@@ -138,6 +140,7 @@ var/list/admin_verbs_server = list(
 	/datum/admins/proc/export_savegame,
 	/datum/admins/proc/import_savegame,
 	/datum/admins/proc/persistent,
+	/datum/admins/proc/persistent_chad,
 	/client/proc/nanomapgen_DumpImage
 	)
 var/list/admin_verbs_debug = list(

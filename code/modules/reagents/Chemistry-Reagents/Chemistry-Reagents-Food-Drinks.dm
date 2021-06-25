@@ -74,7 +74,7 @@
 	description = "A golden yellow syrup, loaded with sugary sweetness."
 	taste_description = "sweetness"
 	nutriment_factor = 10
-	color = "#FFFF00"
+	color = "#eb9605"
 
 /datum/reagent/nutriment/flour
 	name = "flour"
@@ -414,6 +414,32 @@
 		M << "<span class = 'warning'>You feel sick...</span>"
 		M.vomit()
 
+/datum/reagent/drink/lard
+	name = "lard"
+	id = "lard"
+	description = "A thick and smelling lard, with meat and bones fragments. Doesnt looks good."
+	taste_description = "greasy"
+	color = "#F6EFE2"
+
+/datum/reagent/drink/lard/affect_blood(var/mob/living/human/M, var/alien, var/removed)
+	..()
+	if (prob(10))
+		M << "<span class = 'warning'>You feel disgusted and sick...</span>"
+		M.vomit()
+
+/datum/reagent/drink/fat_oil
+	name = "Fat Oil"
+	id = "fat_oil"
+	description = "A thick and smelling oil. Good for seasoning and lamps."
+	taste_description = "greasy"
+	color = "##9B7653"
+
+/datum/reagent/drink/fat_oil/affect_blood(var/mob/living/human/M, var/alien, var/removed)
+	..()
+	if (prob(10))
+		M << "<span class = 'warning'>You feel sick...</span>"
+		M.vomit()
+
 /datum/reagent/drink/grapejuice
 	name = "Grape Juice"
 	id = "grapejuice"
@@ -510,6 +536,13 @@
 	taste_description = "creamy milk"
 	color = "#DFD7AF"
 
+/datum/reagent/drink/kiraspecial
+	name = "Kira Special"
+	description = "Long live the guy who everyone had mistaken for a girl. Baka!"
+	taste_description = "fruity sweetness"
+	color = "#cccc99"
+	adj_temp = -5
+
 /datum/reagent/drink/tea
 	name = "Tea"
 	id = "tea"
@@ -537,7 +570,7 @@
 	name = "Quinine"
 	id = "quinine"
 	description = "Bitter, from the chinchona plant."
-	taste_description = "bitter"
+	taste_description = "very strong bitterness"
 	color = "#f4f4f4"
 
 /datum/reagent/drink/quinine/affect_ingest(var/mob/living/human/M, var/alien, var/removed)
@@ -574,6 +607,13 @@
 	M.make_jittery(5)
 	M.add_chemical_effect(CE_PULSE, 2)
 
+/datum/reagent/drink/coffee/cafe_latte
+	name = "Cafe Latte"
+	description = "A nice, strong and tasty beverage while you are reading."
+	taste_description = "bitter creamy coffee"
+	color = "#c65905"
+	adj_temp = 5
+
 /datum/reagent/drink/hot_coco
 	name = "Hot Chocolate"
 	id = "hot_coco"
@@ -589,7 +629,7 @@
 	id = "tonic"
 	description = "It tastes strange but at least the quinine keeps the Malaria at bay."
 	taste_description = "tart and fresh"
-	color = "#664300"
+	color = "#ffffff80"
 	adj_dizzy = -5
 	adj_drowsy = -3
 	adj_sleepy = -2
@@ -653,6 +693,96 @@
 	description = "Absolutely nothing."
 	taste_description = "nothing"
 
+/datum/reagent/drink/health
+/datum/reagent/drink/health/minor
+	name = "Minor Healing"
+	id = "minor"
+	description = "A weak healing concotion."
+	taste_description = "slightly rejuvenating."
+	color = "#440000"
+	adj_dizzy = -20
+/datum/reagent/drink/health/minor/affect_ingest(var/mob/living/human/M, var/alien, var/removed)
+		M.adjustBruteLoss(-4 * removed)
+		M.adjustFireLoss(-4 * removed)
+		M.adjustBrainLoss(-4 * removed)
+		M.adjustToxLoss(-4 * removed)
+		M.adjustOxyLoss(-4 * removed)
+		M.eye_blurry = max(M.eye_blurry - 5, FALSE)
+		M.add_chemical_effect(CE_PAINKILLER, 5)
+		M.drowsyness = max(M.drowsyness - 5, FALSE)
+		M.AdjustParalysis(-1)
+		M.AdjustStunned(-1)
+		M.AdjustWeakened(-1)
+		M.restore_blood()
+/datum/reagent/drink/health/healing
+	name = "Healing"
+	id = "healing"
+	description = "A healing concotion."
+	taste_description = "more or less rejuvenating."
+	color = "#440000"
+	adj_dizzy = -50
+/datum/reagent/drink/health/healing/affect_ingest(var/mob/living/human/M, var/alien, var/removed)
+		M.adjustBruteLoss(-6 * removed)
+		M.adjustFireLoss(-6 * removed)
+		M.adjustBrainLoss(-6 * removed)
+		M.adjustToxLoss(-6 * removed)
+		M.adjustOxyLoss(-6 * removed)
+		M.eye_blurry = max(M.eye_blurry - 5, FALSE)
+		M.add_chemical_effect(CE_PAINKILLER, 10)
+		M.drowsyness = max(M.drowsyness - 6, FALSE)
+		M.AdjustParalysis(-1)
+		M.AdjustStunned(-1)
+		M.AdjustWeakened(-1)
+		M.restore_blood()
+/datum/reagent/drink/health/plentiful
+	name = "Plentiful Healing"
+	id = "plentiful"
+	description = "A stronger healing concotion."
+	taste_description = "quite rejuvenating."
+	color = "#440000"
+	adj_dizzy = -100
+/datum/reagent/drink/health/plentiful/affect_ingest(var/mob/living/human/M, var/alien, var/removed)
+		M.adjustBruteLoss(-10 * removed)
+		M.adjustFireLoss(-10 * removed)
+		M.adjustBrainLoss(-10 * removed)
+		M.adjustToxLoss(-10 * removed)
+		M.adjustOxyLoss(-10 * removed)
+		M.eye_blurry = max(M.eye_blurry - 5, FALSE)
+		M.add_chemical_effect(CE_PAINKILLER, 20)
+		M.drowsyness = max(M.drowsyness - 10, FALSE)
+		M.AdjustParalysis(-1)
+		M.AdjustStunned(-1)
+		M.AdjustWeakened(-1)
+		M.restore_blood()
+/datum/reagent/drink/health/vigorous
+	name = "Vigorous Healing"
+	id = "vigor"
+	description = "a very strong healing concotion."
+	taste_description = "extremely rejuvenating."
+	color = "#440000"
+	adj_dizzy = -200
+/datum/reagent/drink/health/vigorous/affect_ingest(var/mob/living/human/M, var/alien, var/removed)
+		M.adjustBruteLoss(-25 * removed)
+		M.adjustFireLoss(-25 * removed)
+		M.adjustBrainLoss(-25 * removed)
+		M.adjustToxLoss(-25 * removed)
+		M.adjustOxyLoss(-25 * removed)
+		M.heal_organ_damage(25 * removed, 25 * removed)
+		M.eye_blurry = max(M.eye_blurry - 5, FALSE)
+		M.add_chemical_effect(CE_PAINKILLER, 40)
+		M.drowsyness = max(M.drowsyness - 15, FALSE)
+		M.AdjustParalysis(-1)
+		M.AdjustStunned(-1)
+		M.AdjustWeakened(-1)
+		M.restore_blood()
+/datum/reagent/drink/health/draught
+	name = "Draught"
+	id = "draught"
+	description = "a rejuvenating healing concotion."
+	taste_description = "extremely rejuvenating."
+	color = "#440000"
+/datum/reagent/drink/health/draught/affect_ingest(var/mob/living/human/M, var/alien, var/removed)
+		M.rejuvenate()
 /* Alcohol */
 
 // Basic
@@ -661,7 +791,7 @@
 	name = "Absinthe"
 	id = "absinthe"
 	description = "Watch out that the Green Fairy doesn't come for you!"
-	taste_description = "death and licorice"
+	taste_description = "licorice and herbs"
 	taste_mult = 1.5
 	color = "#33EE00"
 	strength = 40
@@ -671,16 +801,29 @@
 	id = "ale"
 	description = "A dark alchoholic beverage made by malted barley and yeast."
 	taste_description = "hearty barley ale"
-	color = "#664300"
+	color = "#53150AE6"
 	strength = 90
 	nutriment_factor = 2
+
+/datum/reagent/ethanol/mead
+	name = "Mead"
+	id = "mead"
+	description = "A dark alchoholic beverage made by malted barley and yeast."
+	taste_description = "a drink to put some hair on your chest"
+	color = "#53150AE6"
+	strength = 40
+	nutriment_factor = 4
+/datum/reagent/ethanol/mead/affect_ingest(var/mob/living/human/M, var/alien, var/removed)
+	if (strength)
+		if (issmall(M)) removed *= 2 // Small bodymass, more effect from lower volume.
+		M.adjustBruteLoss(-(strength/8 * removed))
 
 /datum/reagent/ethanol/beer
 	name = "Beer"
 	id = "beer"
 	description = "An alcoholic beverage made from malted barley, hops, yeast, and water."
 	taste_description = "beer"
-	color = "#664300"
+	color = "#E68500E6"
 	strength = 70
 	nutriment_factor = 1
 
@@ -689,7 +832,7 @@
 	id = "wheatbeer"
 	description = "An alcoholic beverage made from malted wheat, hops, yeast, and water."
 	taste_description = "wheat beer"
-	color = "#664300"
+	color = "#E68500E6"
 	strength = 70
 	nutriment_factor = 1
 
@@ -727,8 +870,8 @@
 	name = "Gin"
 	id = "gin"
 	description = "It's gin. In space. I say, good sir."
-	taste_description = "an alcoholic christmas tree"
-	color = "#664300"
+	taste_description = "grain alcohol and a hint of a christmas tree"
+	color = "#ffffff80"
 	strength = 20
 
 //Base type for alchoholic drinks containing coffee
@@ -750,9 +893,9 @@
 	name = "Kahlua"
 	id = "kahlua"
 	description = "A widely known, Mexican coffee-flavoured liqueur. In production since 1936!"
-	taste_description = "spiked latte"
+	taste_description = "richness, bitterness and a hint of creaminess"
 	taste_mult = 1.1
-	color = "#664300"
+	color = "#562E00D9"
 	strength = 15
 
 /datum/reagent/ethanol/melonliquor
@@ -767,9 +910,9 @@
 	name = "Rum"
 	id = "rum"
 	description = "Yohoho and all that."
-	taste_description = "sweet"
+	taste_description = "smooth alcohol, richness and sweetness"
 	taste_mult = 1.1
-	color = "#664300"
+	color = "#E832008C"
 	strength = 30
 
 /datum/reagent/ethanol/sake
@@ -819,15 +962,15 @@
 	id = "vodka"
 	description = "Number one drink AND fueling choice for Russians worldwide."
 	taste_description = "grain alcohol"
-	color = "#0064C8" // rgb: FALSE, 100, 200
+	color = "#ffffff80" // rgb: FALSE, 100, 200
 	strength = 25
 
 /datum/reagent/ethanol/whiskey
 	name = "Whiskey"
 	id = "whiskey"
 	description = "A superb and well-aged single-malt whiskey. Damn."
-	taste_description = "molasses"
-	color = "#664300"
+	taste_description = "richness, molasses and a hint of smoke"
+	color = "#AB3C05D9"
 	strength = 25
 
 /datum/reagent/ethanol/wine
@@ -835,7 +978,7 @@
 	id = "wine"
 	description = "An alchoholic beverage made from distilled grape juice."
 	taste_description = "bitter sweetness"
-	color = "#7E4043" // rgb: 126, 64, 67
+	color = "#6C0F1CD9"
 	strength = 45
 	nutriment_factor = 1
 
@@ -1021,8 +1164,8 @@
 	name = "Classic Martini"
 	id = "martini"
 	description = "Vermouth with Gin. Not quite how FALSE07 enjoyed it, but still delicious."
-	taste_description = "dry class"
-	color = "#664300"
+	taste_description = "dryness and juniper"
+	color = "#ffffff80"
 	strength = 25
 
 
@@ -1057,7 +1200,7 @@
 	id = "ginfizz"
 	description = "Refreshingly lemony, deliciously dry."
 	taste_description = "dry, tart lemons"
-	color = "#664300"
+	color = "#ffffff80"
 	strength = 30
 
 /datum/reagent/ethanol/erikasurprise
@@ -1082,8 +1225,8 @@
 	name = "Gin and Tonic"
 	id = "gintonic"
 	description = "An all time classic, mild cocktail."
-	taste_description = "mild and tart"
-	color = "#664300"
+	taste_description = "gin, tartness and bitterness"
+	color = "#ffffff80"
 	strength = 50
 
 /datum/reagent/ethanol/goldschlager
@@ -1092,7 +1235,7 @@
 	description = "100 proof cinnamon schnapps, made for alcoholic teen girls on spring break."
 	taste_description = "burning cinnamon"
 	taste_mult = 1.3
-	color = "#664300"
+	color = "#ffffff80"
 	strength = 50
 
 /datum/reagent/ethanol/hippies_delight
@@ -1119,7 +1262,7 @@
 	id = "iced_beer"
 	description = "A beer which is so cold the air around it freezes."
 	taste_description = "refreshingly cold"
-	color = "#664300"
+	color = "#E68500E6"
 	strength = 50
 	adj_temp = -20
 	targ_temp = 270
@@ -1195,7 +1338,7 @@
 	description = "A Viking's drink, though a cheap one."
 	taste_description = "sweet, sweet alcohol"
 	reagent_state = LIQUID
-	color = "#664300"
+	color = "#eb9605d9"
 	strength = 30
 	nutriment_factor = TRUE
 
@@ -1205,7 +1348,7 @@
 	description = "You've really hit rock bottom now... your liver packed its bags and left last night."
 	taste_description = "bitterness"
 	taste_mult = 2.5
-	color = "#664300"
+	color = "#ffffff80"
 	strength = 12
 
 /datum/reagent/ethanol/neurotoxin

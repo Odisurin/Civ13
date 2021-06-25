@@ -20,6 +20,7 @@
 	mob_size = MOB_LARGE
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	behaviour = "defends"
+	fat_extra = 3
 
 /mob/living/simple_animal/bison
 	name = "bison cow"
@@ -52,6 +53,7 @@
 	wandersounds = list('sound/animals/cow/cow_1.ogg','sound/animals/cow/cow_2.ogg')
 	hostilesounds = list('sound/animals/cow/cow_1.ogg','sound/animals/cow/cow_3.ogg')
 	behaviour = "wander"
+	fat_extra = 3
 
 /mob/living/simple_animal/bisonbull
 	name = "bison bull"
@@ -80,29 +82,26 @@
 	wandersounds = list('sound/animals/cow/cow_1.ogg','sound/animals/cow/cow_2.ogg')
 	hostilesounds = list('sound/animals/cow/cow_1.ogg','sound/animals/cow/cow_3.ogg')
 	behaviour = "wander"
+	fat_extra = 3
 
 /mob/living/simple_animal/bison/death()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		bison_count -= 1
+
+	bison_count &= src
 	..()
 /mob/living/simple_animal/bison/Destroy()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		bison_count -= 1
+
+	bison_count &= src
 	..()
 /mob/living/simple_animal/bisonbull/death()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		bison_count -= 1
+
+	bison_count &= src
 	..()
 /mob/living/simple_animal/bisonbull/Destroy()
-	if (!removed_from_list)
-		removed_from_list=TRUE
-		bison_count -= 1
+
+	bison_count &= src
 	..()
 /mob/living/simple_animal/bisonbull/New()
-	bison_count += 1
+	bison_count |= src
 	..()
 	spawn(1)
 		if (calf)
@@ -119,7 +118,7 @@
 				mob_size = MOB_LARGE
 
 /mob/living/simple_animal/bison/New()
-	bison_count += 1
+	bison_count |= src
 	udder = new(50)
 	udder.my_atom = src
 	..()
@@ -162,7 +161,7 @@
 		overpopulationCountdown--
 		return
 
-	if (!pregnant && bison_count < 30)
+	if (!pregnant && bison_count.len < 30)
 		var/nearbyObjects = range(1,src) //3x3 area around cow
 		for(var/mob/living/simple_animal/bisonbull/M in nearbyObjects)
 			if (M.stat == CONSCIOUS)

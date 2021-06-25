@@ -32,11 +32,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>. You are in charge of the whole company. Organize your troops accordingly!")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_VERY_HIGH)
-	H.setStat("rifle", STAT_NORMAL) //muskets
+	H.setStat("rifle", STAT_NORMAL)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_HIGH)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_NORMAL)
 	H.setStat("machinegun", STAT_MEDIUM_HIGH)
 	return TRUE
@@ -75,11 +75,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>. You are in charge of the whole platoon. Organize your troops accordingly!")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_VERY_HIGH)
-	H.setStat("rifle", STAT_NORMAL) //muskets
+	H.setStat("rifle", STAT_NORMAL)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_HIGH)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_NORMAL)
 	H.setStat("machinegun", STAT_MEDIUM_HIGH)
 	return TRUE
@@ -121,11 +121,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>, lead a squad against the enemy and follow your Commanding Officer's orders!")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_NORMAL)
-	H.setStat("rifle", STAT_NORMAL) //muskets
+	H.setStat("rifle", STAT_NORMAL)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_NORMAL)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_NORMAL)
 	H.setStat("machinegun", STAT_MEDIUM_HIGH)
 	return TRUE
@@ -158,11 +158,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>, a basic grunt. Follow orders and defeat the enemy!")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_MEDIUM_HIGH) //muskets
+	H.setStat("rifle", STAT_MEDIUM_HIGH)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_NORMAL)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_MEDIUM_LOW)
 	H.setStat("machinegun", STAT_MEDIUM_LOW)
 	return TRUE
@@ -203,11 +203,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>. Keep your soldiers healthy and breathing! The medics will bring you men to operate on.")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_MEDIUM_LOW) //muskets
+	H.setStat("rifle", STAT_MEDIUM_LOW)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_MEDIUM_LOW) //not used
+	H.setStat("swords", STAT_MEDIUM_LOW)
 	H.setStat("pistol", STAT_MEDIUM_LOW)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_VERY_HIGH)
 	H.setStat("machinegun", STAT_MEDIUM_LOW)
 	return TRUE
@@ -240,11 +240,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>, a basic grunt. Follow orders and defeat the enemy!")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_HIGH) //muskets
+	H.setStat("rifle", STAT_HIGH)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_NORMAL)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_MEDIUM_LOW)
 	H.setStat("machinegun", STAT_MEDIUM_LOW)
 	return TRUE
@@ -258,6 +258,14 @@
 /datum/job/filipino/give_random_name(var/mob/living/human/H)
 	H.name = H.species.get_random_filipino_name(H.gender)
 	H.real_name = H.name
+	var/new_hair = "Black"
+	var/hex_hair = hair_colors[new_hair]
+	H.r_hair = hex2num(copytext(hex_hair, 2, 4))
+	H.g_hair = hex2num(copytext(hex_hair, 4, 6))
+	H.b_hair = hex2num(copytext(hex_hair, 6, 8))
+	H.r_facial = hex2num(copytext(hex_hair, 2, 4))
+	H.g_facial = hex2num(copytext(hex_hair, 4, 6))
+	H.b_facial = hex2num(copytext(hex_hair, 6, 8))
 /datum/job/filipino/captain
 	title = " Kapitan"
 	en_meaning = "captain"
@@ -295,11 +303,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>. You are in charge of the whole company. Organize your troops accordingly!")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_VERY_HIGH)
-	H.setStat("rifle", STAT_NORMAL) //muskets
+	H.setStat("rifle", STAT_NORMAL)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_HIGH)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_NORMAL)
 	H.setStat("machinegun", STAT_MEDIUM_HIGH)
 	return TRUE
@@ -341,11 +349,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>. You are in charge of the whole platoon. Organize your troops accordingly!")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_VERY_HIGH)
-	H.setStat("rifle", STAT_NORMAL) //muskets
+	H.setStat("rifle", STAT_NORMAL)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_HIGH)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_NORMAL)
 	H.setStat("machinegun", STAT_MEDIUM_HIGH)
 	return TRUE
@@ -363,6 +371,7 @@
 	is_ww2 = FALSE
 	is_officer = TRUE
 	is_ph_us_war = TRUE
+	can_be_female = TRUE
 
 	min_positions = 2
 	max_positions = 10
@@ -389,11 +398,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>, lead a squad against the enemy and follow your Commanding Officer's orders!")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_NORMAL)
-	H.setStat("rifle", STAT_NORMAL) //muskets
+	H.setStat("rifle", STAT_NORMAL)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_NORMAL)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_NORMAL)
 	H.setStat("machinegun", STAT_MEDIUM_HIGH)
 	return TRUE
@@ -407,6 +416,7 @@
 	is_ww2 = FALSE
 	uses_squads = TRUE
 	is_ph_us_war = TRUE
+	can_be_female = TRUE
 
 	min_positions = 8
 	max_positions = 100
@@ -447,11 +457,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>, a basic grunt. Follow orders and defeat the enemy!")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_MEDIUM_HIGH) //muskets
+	H.setStat("rifle", STAT_MEDIUM_HIGH)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_NORMAL)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_MEDIUM_LOW)
 	H.setStat("machinegun", STAT_MEDIUM_LOW)
 	return TRUE
@@ -465,6 +475,7 @@
 	is_ph_us_war = TRUE
 	is_medic = TRUE
 	is_ww2 = FALSE
+	can_be_female = TRUE
 
 	min_positions = 1
 	max_positions = 4
@@ -495,11 +506,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>. Keep your soldiers healthy and breathing! Find the wounded and help them.")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_MEDIUM_LOW) //muskets
+	H.setStat("rifle", STAT_MEDIUM_LOW)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_MEDIUM_LOW) //not used
+	H.setStat("swords", STAT_MEDIUM_LOW)
 	H.setStat("pistol", STAT_MEDIUM_LOW)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_VERY_HIGH)
 	H.setStat("machinegun", STAT_MEDIUM_LOW)
 	return TRUE
@@ -514,6 +525,7 @@
 	uses_squads = TRUE
 	is_ph_us_war = TRUE
 	whitelisted = TRUE
+	can_be_female = TRUE
 
 	min_positions = 8
 	max_positions = 100
@@ -546,11 +558,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>, a well trained sniper. Follow orders and take out priority targets from a distance!")
 	H.setStat("strength", STAT_NORMAL)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_VERY_HIGH) //muskets
+	H.setStat("rifle", STAT_VERY_HIGH)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_NORMAL)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_MEDIUM_LOW)
 	H.setStat("machinegun", STAT_MEDIUM_LOW)
 	return TRUE

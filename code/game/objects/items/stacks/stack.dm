@@ -139,7 +139,7 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 
 /obj/item/stack/attack_hand(mob/user as mob)
 	if (user.get_inactive_hand() == src)
-		var/obj/item/stack/F = split(1)
+		var/obj/item/stack/F = split(min(1, src.amount))
 		if (F)
 			F.update_icon()
 			src.update_icon()
@@ -287,6 +287,7 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 	var/mob/living/human/H = user
 	var/obj/structure/religious/totem/newtotem = null
 	var/obj/structure/simple_door/key_door/custom/build_override_door = null
+	var/obj/structure/simple_door/key_door/faction_door/faction_override_door = null
 	var/obj/item/weapon/key/civ/build_override_key = null
 	var/obj/item/stack/money/coppercoin/build_override_coins_copper = null
 	var/obj/item/stack/money/silvercoin/build_override_coins_silver = null
@@ -396,6 +397,10 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 		for(var/obj/structure/gatecontrol/GC in range(6, user.loc))
 			user << "<span class = 'danger'>You cannot build a control so close to another one!</span>"
 			return
+	else if (findtext(recipe.title, "blast door control"))
+		for(var/obj/structure/gatecontrol/blastcontrol/GC in range(10, user.loc))
+			user << "<span class = 'danger'>You cannot build a control so close to another one!</span>"
+			return
 	else if (findtext(recipe.title, "signpost"))
 		var/indesc = input(user, "Add a West sign? Leave empty to not add one.", "Signpost", "") as text|null
 		if (indesc != null && indesc != "")
@@ -412,6 +417,27 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 		indesc = input(user, "Add a South sign? Leave empty to not add one.", "Signpost", "") as text|null
 		if (indesc != null && indesc != "")
 			customdesc += "<br><b>South:</b> [indesc]"
+
+	else if (findtext(recipe.title, "carriage"))
+		if (H.getStatCoeff("crafting") < 1.7)
+			H << "<span class = 'danger'>This is too complex for your skill level.</span>"
+			return
+
+	else if (findtext(recipe.title, "faction") && findtext(recipe.title, "door"))
+		if (H.getStatCoeff("crafting") < 1)
+			H << "<span class = 'danger'>This is too complex for your skill level.</span>"
+			return
+
+		if (!ishuman(user))
+			return
+		if(H.civilization == "none")
+			H << "You must be part of a faction to craft this door"
+			return
+		else
+			faction_override_door = new /obj/structure/simple_door/key_door/faction_door
+			faction_override_door.faction = H.civilization
+			faction_override_door.name = "[H.civilization]'s Door"
+
 	else if (findtext(recipe.title, "locked") && findtext(recipe.title, "door") && !findtext(recipe.title, "unlocked"))
 		if (H.getStatCoeff("crafting") < 1)
 			H << "<span class = 'danger'>This is too complex for your skill level.</span>"
@@ -453,7 +479,7 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 		customname = input(user, "Choose a brand for this can:", "Tin Can Brand" , "")
 		if (customname == "" || customname == null)
 			customname = ""
-		customcolor1 = input(user, "Choose a main color:", "Tin Can Main Color" , "#000000")
+		customcolor1 = WWinput(user, "Choose a main color:", "Tin Can Main Color" , "#000000", "color")
 		if (customcolor1 == null || customcolor1 == "")
 			customcolor1 = "#000000"
 
@@ -465,7 +491,7 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 		customname = input(user, "Choose a name for this pack:", "Cigarette Pack Name" , "cigarette pack")
 		if (customname == "" || customname == null)
 			customname = "cigarette pack"
-		customcolor = input(user, "Choose a color:", "Cigarette Pack Color" , "#000000")
+		customcolor = WWinput(user, "Choose a color:", "Cigarette Pack Color" , "#000000", "color")
 		if (customcolor == null || customcolor == "")
 			return
 
@@ -532,7 +558,7 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 		customname = input(user, "Choose a name for this pump:", "Fuel Pump Name" , "fuel pump")
 		if (customname == "" || customname == null)
 			customname = "fuel pump"
-		customcolor = input(user, "Fuel Pump - Choose a color:", "Fuel Pump Color" , "#FFFFFF")
+		customcolor = WWinput(user, "Fuel Pump - Choose a color:", "Fuel Pump Color" , "#FFFFFF", "color")
 		if (customcolor == null || customcolor == "")
 			return
 
@@ -678,6 +704,30 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 					qdelHandReturn(H.l_hand, H)
 				else if (istype(H.r_hand, /obj/item/weapon/material/handle))
 					qdelHandReturn(H.r_hand, H)
+
+	if (findtext(recipe.title, "carriage"))
+		if (!istype(H.l_hand, /obj/item/stack/material/rope) && !istype(H.r_hand, /obj/item/stack/material/rope))
+			user << "<span class = 'warning'>You need at least 20 ropes on one of your hands in order to make this.</span>"
+			return
+		else
+			if (istype(H.l_hand, /obj/item/stack/material/rope))
+				var/obj/item/stack/material/rope/NR = H.l_hand
+				if (NR.amount >= 20)
+					NR.amount -= 20
+					if (NR.amount <= 0)
+						qdelHandReturn(H.l_hand, H)
+				else
+					user << "<span class = 'warning'>You need at least 20 ropes on one of your hands in order to make this.</span>"
+					return
+			else if (istype(H.r_hand, /obj/item/stack/material/rope))
+				var/obj/item/stack/material/rope/NR = H.r_hand
+				if (NR.amount >= 20)
+					NR.amount -= 20
+					if (NR.amount <= 0)
+						qdelHandReturn(H.r_hand, H)
+				else
+					user << "<span class = 'warning'>You need at least 20 ropes on one of your hands in order to make this.</span>"
+					return
 
 	if (findtext(recipe.title, "raft"))
 		if (!istype(H.l_hand, /obj/item/stack/material/rope) && !istype(H.r_hand, /obj/item/stack/material/rope))
@@ -1118,6 +1168,78 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 					user << "<span class = 'warning'>You need a stack of at least 1 gold in one your hands in order to make this.</span>"
 					return
 
+	else if (findtext(recipe.title, "gold laurel crown"))
+		if (!istype(H.l_hand, /obj/item/stack/material/leaf) && !istype(H.r_hand, /obj/item/stack/material/leaf))
+			user << "<span class = 'warning'>You need a stack of at least 6 leaves in one of your hands in order to make this.</span>"
+			return
+		else
+			if (istype(H.l_hand, /obj/item/stack/material/gold))
+				var/obj/item/stack/material/gold/NB = H.l_hand
+				if (NB.amount >= 1)
+					NB.amount -= 1
+					if (NB.amount <= 0)
+						qdelHandReturn(H.l_hand, H)
+				else
+					user << "<span class = 'warning'>You need a stack of at least 1 gold in one of your hands in order to make this.</span>"
+					return
+			else if (istype(H.r_hand, /obj/item/stack/material/gold))
+				var/obj/item/stack/material/gold/NB = H.r_hand
+				if (NB.amount >= 1)
+					NB.amount -= 1
+					if (NB.amount <= 0)
+						qdelHandReturn(H.r_hand, H)
+				else
+					user << "<span class = 'warning'>You need a stack of at least 1 gold in one your hands in order to make this.</span>"
+					return
+
+	else if (findtext(recipe.title, "imperial gold laurel crown")) // for crabs
+		if (!istype(H.l_hand, /obj/item/stack/material/leaf) && !istype(H.r_hand, /obj/item/stack/material/leaf))
+			user << "<span class = 'warning'>You need a stack of at least 3 leaves in one of your hands in order to make this.</span>"
+			return
+		else
+			if (istype(H.l_hand, /obj/item/stack/material/gold))
+				var/obj/item/stack/material/gold/NB = H.l_hand
+				if (NB.amount >= 1)
+					NB.amount -= 1
+					if (NB.amount <= 0)
+						qdelHandReturn(H.l_hand, H)
+				else
+					user << "<span class = 'warning'>You need a stack of at least 1 gold in one of your hands in order to make this.</span>"
+					return
+			else if (istype(H.r_hand, /obj/item/stack/material/gold))
+				var/obj/item/stack/material/gold/NB = H.r_hand
+				if (NB.amount >= 1)
+					NB.amount -= 1
+					if (NB.amount <= 0)
+						qdelHandReturn(H.r_hand, H)
+				else
+					user << "<span class = 'warning'>You need a stack of at least 1 gold in one your hands in order to make this.</span>"
+					return
+
+	else if (findtext(recipe.title, "leaf crown") || findtext(recipe.title, "ceremonial leaf crown"))
+		if (!istype(H.l_hand, /obj/item/stack/material/leaf) && !istype(H.r_hand, /obj/item/stack/material/leaf))
+			user << "<span class = 'warning'>You need a stack of at least 4 leaves in one of your hands in order to make this.</span>"
+			return
+		else
+			if (istype(H.l_hand, /obj/item/stack/material/leather))
+				var/obj/item/stack/material/leather/NB = H.l_hand
+				if (NB.amount >= 2)
+					NB.amount -= 2
+					if (NB.amount <= 0)
+						qdelHandReturn(H.l_hand, H)
+				else
+					user << "<span class = 'warning'>You need a stack of at least 2 leather in one of your hands in order to make this.</span>"
+					return
+			else if (istype(H.r_hand, /obj/item/stack/material/leather))
+				var/obj/item/stack/material/leather/NB = H.r_hand
+				if (NB.amount >= 2)
+					NB.amount -= 2
+					if (NB.amount <= 0)
+						qdelHandReturn(H.r_hand, H)
+				else
+					user << "<span class = 'warning'>You need a stack of at least 2 leather in one your hands in order to make this.</span>"
+					return
+
 	else if (findtext(recipe.title, "fiendish headdress"))
 		if (!istype(H.l_hand, /obj/item/stack/material/cloth) && !istype(H.r_hand, /obj/item/stack/material/cloth))
 			user << "<span class = 'warning'>You need a stack of at least 2 cloth in one of your hands in order to make this.</span>"
@@ -1142,6 +1264,30 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 					user << "<span class = 'warning'>You need a stack of at least 2 bone in one your hands in order to make this.</span>"
 					return
 
+	else if (findtext(recipe.title, "black african mask") || findtext(recipe.title, "ceremonial black african mask"))
+		if (!istype(H.l_hand, /obj/item/stack/material/wood) && !istype(H.r_hand, /obj/item/stack/material/wood))
+			user << "<span class = 'warning'>You need a stack of at least 3 wood in one of your hands in order to make this.</span>"
+			return
+		else
+			if (istype(H.l_hand, /obj/item/stack/material/pelt/cowpelt))
+				var/obj/item/stack/material/pelt/cowpelt/NB = H.l_hand
+				if (NB.amount >= 2)
+					NB.amount -= 2
+					if (NB.amount <= 0)
+						qdelHandReturn(H.l_hand, H)
+				else
+					user << "<span class = 'warning'>You need a stack of at least 2 cowpelts in one of your hands in order to make this.</span>"
+					return
+			else if (istype(H.r_hand, /obj/item/stack/material/pelt/cowpelt))
+				var/obj/item/stack/material/pelt/cowpelt/NB = H.r_hand
+				if (NB.amount >= 2)
+					NB.amount -= 2
+					if (NB.amount <= 0)
+						qdelHandReturn(H.r_hand, H)
+				else
+					user << "<span class = 'warning'>You need a stack of at least 2 cowpelts in one of your hands in order to make this.</span>"
+					return
+/*
 	else if (findtext(recipe.title, "armorbench"))
 		if (!istype(H.l_hand, /obj/item/stack/material/wood) && !istype(H.r_hand, /obj/item/stack/material/wood))
 			user << "<span class = 'warning'>You need a stack of at least 10 wood in one of your hands in order to make this.</span>"
@@ -1165,6 +1311,7 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 				else
 					user << "<span class = 'warning'>You need a stack of at least 3 iron in one of your hands in order to make this.</span>"
 					return
+*/
 	else if (findtext(recipe.title, "fortress wall"))
 		if (!istype(H.l_hand, /obj/item/stack/material/stone) && !istype(H.r_hand, /obj/item/stack/material/stone))
 			user << "<span class = 'warning'>You need a stack of at least 8 stone in one of your hands in order to make this.</span>"
@@ -1187,6 +1334,29 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 						qdelHandReturn(H.r_hand, H)
 				else
 					user << "<span class = 'warning'>You need a stack of at least 8 stone bricks in one of your hands in order to make this.</span>"
+					return
+	else if (findtext(recipe.title, "sandstone fortress wall"))
+		if (!istype(H.l_hand, /obj/item/stack/material/sandstone) && !istype(H.r_hand, /obj/item/stack/material/sandstone))
+			user << "<span class = 'warning'>You need a stack of at least 8 sandstone in one of your hands in order to make this.</span>"
+			return
+		else
+			if (istype(H.l_hand, /obj/item/stack/material/stonebrick))
+				var/obj/item/stack/material/stonebrick/NB = H.l_hand
+				if (NB.amount >= 5)
+					NB.amount -= 5
+					if (NB.amount <= 0)
+						qdelHandReturn(H.l_hand, H)
+				else
+					user << "<span class = 'warning'>You need a stack of at least 5 stone bricks in one of your hands in order to make this.</span>"
+					return
+			else if (istype(H.r_hand, /obj/item/stack/material/stonebrick))
+				var/obj/item/stack/material/stonebrick/NB = H.r_hand
+				if (NB.amount >= 5)
+					NB.amount -= 5
+					if (NB.amount <= 0)
+						qdelHandReturn(H.r_hand, H)
+				else
+					user << "<span class = 'warning'>You need a stack of at least 5 stone bricks in one of your hands in order to make this.</span>"
 					return
 
 	else if (findtext(recipe.title, "purple arabic turban helmet") || findtext(recipe.title, "red arabic turban helmet") || findtext(recipe.title, "green arabic turban helmet") || findtext(recipe.title, "blue arabic turban helmet"))
@@ -1682,7 +1852,7 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 		produced = 4
 	else if (recipe.result_type == /obj/item/stack/arrowhead/vial)
 		produced = 4
-	if (recipe.result_type == /obj/structure/sink/well || recipe.result_type == /obj/structure/sink/well/sandstone)
+	if (recipe.result_type == /obj/structure/sink/well || recipe.result_type == /obj/structure/sink/well/sandstone || recipe.result_type == /obj/structure/sink/well/marble)
 		for (var/obj/structure/sink/puddle/P in get_turf(H))
 			qdel(P)
 	var/inpt = 50
@@ -1810,6 +1980,12 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 			build_override_door.add_fingerprint(user)
 			qdel(O)
 			return
+		if (faction_override_door)
+			faction_override_door.loc = get_turf(O)
+			faction_override_door.set_dir(user.dir)
+			faction_override_door.add_fingerprint(user)
+			qdel(O)
+			return
 		if (customname != "")
 			O.name = customname
 
@@ -1905,12 +2081,46 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 			C.name = customname
 			C.do_color()
 		else if (istype(O, /obj/item/weapon/can))
-			var/obj/item/weapon/can/C = O
-			C.customcolor1 = customcolor1
-			C.customcolor2 = customcolor2
-			C.brand = "[customname] "
-			C.name = "empty [C.brand]can"
-			C.do_color()
+			if (istype(O, /obj/item/weapon/can/small))
+				var/obj/item/weapon/can/small/C = O
+				C.customcolor1 = customcolor1
+				C.customcolor2 = customcolor2
+				C.brand = "[customname] "
+				C.name = "empty [C.brand]can"
+				C.do_color()
+				var/obj/item/weapon/can/C1 = new/obj/item/weapon/can/small(get_turf(O))
+				C1.customcolor1 = customcolor1
+				C1.customcolor2 = customcolor2
+				C1.brand = "[customname] "
+				C1.name = "empty [C1.brand]can"
+				C1.do_color()
+				var/obj/item/weapon/can/small/C2 = new/obj/item/weapon/can/small(get_turf(O))
+				C2.customcolor1 = customcolor1
+				C2.customcolor2 = customcolor2
+				C2.brand = "[customname] "
+				C2.name = "empty [C2.brand]can"
+				C2.do_color()
+			else if (istype(O, /obj/item/weapon/can/large))
+				var/obj/item/weapon/can/large/C = O
+				C.customcolor1 = customcolor1
+				C.customcolor2 = customcolor2
+				C.brand = "[customname] "
+				C.name = "empty [C.brand]can"
+				C.do_color()
+			else
+				var/obj/item/weapon/can/C = O
+				C.customcolor1 = customcolor1
+				C.customcolor2 = customcolor2
+				C.brand = "[customname] "
+				C.name = "empty [C.brand]can"
+				C.do_color()
+				var/obj/item/weapon/can/C1 = new/obj/item/weapon/can(get_turf(O))
+				C1.customcolor1 = customcolor1
+				C1.customcolor2 = customcolor2
+				C1.brand = "[customname] "
+				C1.name = "empty [C1.brand]can"
+				C1.do_color()
+
 		else if (istype(O, /obj/item/weapon/paper/official))
 			var/obj/item/weapon/paper/official/C = O
 			C.faction = H.civilization
@@ -2058,26 +2268,6 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 			new/obj/item/ammo_casing/bolt(get_turf(O))
 			new/obj/item/ammo_casing/bolt(get_turf(O))
 			new/obj/item/ammo_casing/bolt(get_turf(O))
-		else if (istype(O, /obj/item/weapon/can))
-			var/obj/item/weapon/can/C1 = new/obj/item/weapon/can(get_turf(O))
-			C1.customcolor1 = customcolor1
-			C1.customcolor2 = customcolor2
-			C1.brand = "[customname] "
-			C1.name = "empty [C1.brand]can"
-			C1.do_color()
-		else if (istype(O, /obj/item/weapon/can/small))
-			var/obj/item/weapon/can/small/C1 = new/obj/item/weapon/can/small(get_turf(O))
-			C1.customcolor1 = customcolor1
-			C1.customcolor2 = customcolor2
-			C1.brand = "[customname] "
-			C1.name = "empty [C1.brand]can"
-			C1.do_color()
-			var/obj/item/weapon/can/small/C2 = new/obj/item/weapon/can/small(get_turf(O))
-			C2.customcolor1 = customcolor1
-			C2.customcolor2 = customcolor2
-			C2.brand = "[customname] "
-			C2.name = "empty [C2.brand]can"
-			C2.do_color()
 		else if (istype(O, /obj/item/clothing/accessory/storage/passport))
 			var/obj/item/clothing/accessory/storage/passport/PP = O
 			PP.owner = H
@@ -2096,7 +2286,7 @@ obj/item/stack/Crossed(var/obj/item/stack/S)
 
 	if (href_list["make"])
 
-		if (amount < 1)
+		if (amount < 0)
 			qdel(src)
 			return
 

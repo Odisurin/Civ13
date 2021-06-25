@@ -27,6 +27,16 @@ AWARDS:
 				else if (original_job && original_job.title == "Ichi Wakagashira")
 					map.scores["Ichiwa-Kai"] += 1
 					awards["service"]=0
+	if (map.ID == MAP_SEKIGAHARA && stat != DEAD)
+		if (original_job && (original_job.title == "Azuma no Daimyo" || original_job.title ==  "Sei no Daimyo"))
+			awards["service"]++
+			if (awards["service"]>=60)
+				if (original_job && original_job.title == "Azuma no Daimyo")
+					map.scores["Eastern Army"] += 1
+					awards["service"]=0
+				else if (original_job && original_job.title == "Sei no Daimyo")
+					map.scores["Western Army"] += 1
+					awards["service"]=0
 
 	if (map.gamemode == "Hardcore")
 		if (map.ordinal_age>=5)
@@ -57,6 +67,10 @@ AWARDS:
 				if (islist(i) && i[1] != "" && i[2] >= 100 && i[3]==0)
 					i[3]=1
 					awards["kill_count"]++
+			for(var/list/i in awards["melee_kills"])
+				if (islist(i) && i[1] != "" && i[2] >= 100 && i[3]==0)
+					i[3]=1
+					awards["melee_kill_count"]++
 			if (awards["kill_count"]>= 10 && !("iron cross 1st class" in awarded))
 				map.give_award(client.ckey, name,"iron cross 1st class", capitalize(faction_text),src)
 				map.remove_award(client.ckey, name, "iron cross 2nd class")
@@ -64,6 +78,8 @@ AWARDS:
 				map.give_award(client.ckey, name,"iron cross 2nd class", capitalize(faction_text),src)
 			else if (awards["kill_count"]>= 3 && !("assault badge" in awarded))
 				map.give_award(client.ckey, name,"assault badge", capitalize(faction_text),src)
+			if (awards["melee_kill_count"]>= 5 && !("order of the rising sun" in awarded))
+				map.give_award(client.ckey, name,"order of the rising sun", capitalize(faction_text),src)
 			return TRUE
 	return FALSE
 /obj/map_metadata/proc/save_awards()
@@ -114,6 +130,8 @@ AWARDS:
 
 				if ("iron cross 1st class")
 					MEDAL = new/obj/item/clothing/accessory/medal/german/ww2/iron_cross_1st(L.loc)
+				if ("order of the rising sun")
+					MEDAL = new/obj/item/clothing/accessory/medal/japanese/ww2/rising_sun(L.loc)
 
 			if (MEDAL)
 				var/obj/item/clothing/CL = L.w_uniform

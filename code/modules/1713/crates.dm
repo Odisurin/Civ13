@@ -53,6 +53,7 @@ obj/structure/closet/crate/chest
 	icon_state = "wood_chest"
 	icon_opened = "wood_chest_opened"
 	icon_closed = "wood_chest"
+	health = 2000
 	storage_capacity = 5 * MOB_MEDIUM
 
 obj/structure/closet/crate/treasurechest
@@ -196,6 +197,7 @@ obj/structure/closet/crate/empty
 	density = FALSE
 	storagecap = 6
 	anchored = TRUE
+	health = 5000
 
 /obj/structure/closet/crate/bayonets
 	name = "bayonets crate"
@@ -316,6 +318,11 @@ obj/structure/closet/crate/empty
 /obj/structure/closet/crate/rations/beer
 	name = "Rations: beer"
 	paths = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/small/beer = 10,)
+	cratevalue = 60 //50 base
+
+/obj/structure/closet/crate/rations/sake
+	name = "Rations: sake"
+	paths = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/small/sake = 10,)
 	cratevalue = 60 //50 base
 
 /obj/structure/closet/crate/rations/ale
@@ -450,8 +457,27 @@ obj/structure/closet/crate/empty
 	icon_closed = "wood_crate"
 	paths = list(/obj/item/clothing/accessory/storage/webbing = 10)
 	cratevalue = 110 //assuming 10 value
-
-
+/////////////ABASHIRI////////////////////
+/obj/structure/closet/crate/abashiri/ammo
+	name = "Arisaka Ammunition"
+	paths = list(/obj/item/ammo_magazine/arisaka = 15,)
+	cratevalue = 60 //50 base
+/obj/structure/closet/crate/abashiri/ammo/type26
+	name = "Type 26 Ammunition"
+	paths = list(/obj/item/ammo_magazine/c9mm_jap_revolver = 10,)
+	cratevalue = 60 //50 base
+/obj/structure/closet/crate/abashiri/guns
+	name = "Arisaka Rifles"
+	paths = list(/obj/item/weapon/gun/projectile/boltaction/arisaka30 = 5,)
+	cratevalue = 60 //50 base
+/obj/structure/closet/crate/abashiri/guns/type26
+	name = "Type 26 Revolvers"
+	paths = list(/obj/item/weapon/gun/projectile/revolver/t26_revolver = 5,)
+	cratevalue = 60 //50 base
+/obj/structure/closet/crate/abashiri/batons
+	name = "Batons"
+	paths = list(/obj/item/weapon/gun/projectile/revolver/t26_revolver = 10,)
+	cratevalue = 60 //50 base
 ////WW1////////
 obj/structure/closet/crate/ww1/grenades_french
 	name = "F1 grenade crate"

@@ -14,7 +14,7 @@
 	max_positions = 1
 	is_yakuza = TRUE
 	is_yama = TRUE
-
+	can_be_female = TRUE
 /datum/job/japanese/yakuza_underboss/equip(var/mob/living/human/H)
 	if (!H)	return FALSE
 //shoes
@@ -68,7 +68,7 @@
 	min_positions = 1
 	max_positions = 2
 	is_yama = TRUE
-
+	can_be_female = TRUE
 /datum/job/japanese/yakuza_underboss_deputy/equip(var/mob/living/human/H)
 	if (!H)	return FALSE
 //shoes
@@ -118,6 +118,7 @@
 	max_positions = 48
 	is_yakuza = TRUE
 	is_yama = TRUE
+	can_be_female = TRUE
 /datum/job/japanese/yakuza/equip(var/mob/living/human/H)
 	if (!H)	return FALSE
 //shoes
@@ -148,11 +149,11 @@
 	H.add_note("Role", "You are a <b>[title]</b>, a gang member employed by Yamaguchi-Gumi Clan. Follow your <b>Underboss'</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_MEDIUM_HIGH) //muskets
+	H.setStat("rifle", STAT_MEDIUM_HIGH)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_NORMAL)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_MEDIUM_LOW)
 	if (prob(25))
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/fedora(H), slot_head)
@@ -172,6 +173,7 @@
 	max_positions = 1
 	is_yakuza = TRUE
 	is_ichi = TRUE
+	can_be_female = TRUE
 /datum/job/japanese/yakuza_underboss_ichi/equip(var/mob/living/human/H)
 	if (!H)	return FALSE
 //shoes
@@ -224,6 +226,7 @@
 	max_positions = 2
 	is_yakuza = TRUE
 	is_ichi = TRUE
+	can_be_female = TRUE
 /datum/job/japanese/yakuza_underboss_deputy_ichi/equip(var/mob/living/human/H)
 	if (!H)	return FALSE
 //shoes
@@ -271,6 +274,7 @@
 	max_positions = 48
 	is_yakuza = TRUE
 	is_ichi = TRUE
+	can_be_female = TRUE
 /datum/job/japanese/yakuza_ichi/equip(var/mob/living/human/H)
 	if (!H)	return FALSE
 //shoes
@@ -302,10 +306,10 @@
 	H.add_note("Role", "You are a <b>[title]</b>, a gang member employed by Ichiwa-Kai Clan. Follow your <b>Underboss'</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_MEDIUM_HIGH) //muskets
+	H.setStat("rifle", STAT_MEDIUM_HIGH)
 	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("swords", STAT_NORMAL)
 	H.setStat("pistol", STAT_NORMAL)
-	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("bows", STAT_NORMAL)
 	H.setStat("medical", STAT_MEDIUM_LOW)
 	return TRUE

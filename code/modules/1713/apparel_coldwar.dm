@@ -202,6 +202,7 @@
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
 	cold_protection = UPPER_TORSO|LOWER_TORSO|LEG_LEFT|LEG_RIGHT|ARM_LEFT|ARM_RIGHT
 
+
 /* US Army Armor & Helmets*/
 
 /obj/item/clothing/head //why is this HERE? @fantasticfwoosh
@@ -442,6 +443,20 @@
 	armor = list(melee = 50, arrow = 45, gun = 15, energy = 15, bomb = 55, bio = 20, rad = FALSE)
 	health = 24
 
+/obj/item/clothing/head/nva_hat
+	name = "NVA cap"
+	desc = "A field cap with the markings of an NVA officer."
+	icon_state = "nva_off_cap"
+	item_state = "nva_off_cap"
+	body_parts_covered = HEAD
+
+/obj/item/clothing/head/ww2/nkvd_cap/kgb
+	name = "KGB cap"
+	desc = "A cap and worn by KGB."
+	icon_state = "nkvd_cap"
+	item_state = "nkvd_cap"
+	worn_state = "nkvd_cap"
+
 /* Vietcong Clothes*/
 
 /obj/item/clothing/under/localnlf1
@@ -544,6 +559,19 @@
 	min_cold_protection_temperature = SHOE_MIN_COLD_PROTECTION_TEMPERATURE
 	var/colorn = 1
 
+/obj/item/clothing/under/nva
+	name = "NVA uniform"
+	desc = "A khaki uniform of the North Vietnamese Army."
+	icon_state = "NVAuni"
+	item_state = "NVAuni"
+	worn_state = "NVAuni"
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
+/obj/item/clothing/under/nva/officer
+	name = "NVA officer uniform"
+	desc = "A khaki uniform of the North Vietnamese Army. This one bearing the ranks of an officer"
+	icon_state = "NVAuni_off"
+	item_state = "NVAuni_off"
+	worn_state = "NVAuni_off"
 /* Cold War Armor*/
 
 /obj/item/clothing/accessory/armor //again im confused why this is the case. It should be moved somewhere higher up into armor.dm or/and tagged into /modern especially @fantasticfwoosh
@@ -660,6 +688,41 @@
 	new /obj/item/ammo_magazine/gewehr98(src)
 	new /obj/item/ammo_magazine/gewehr98(src)
 	new /obj/item/ammo_magazine/gewehr98(src)
+
+/obj/item/weapon/storage/belt/smallpouches/us_stanag
+/obj/item/weapon/storage/belt/smallpouches/us_stanag/New()
+	..()
+	new /obj/item/ammo_magazine/m16(src)
+	new /obj/item/ammo_magazine/m16(src)
+	new /obj/item/ammo_magazine/m16(src)
+	new /obj/item/stack/medical/bruise_pack/gauze(src)
+
+/obj/item/weapon/storage/belt/smallpouches/green/sov_74
+/obj/item/weapon/storage/belt/smallpouches/green/sov_74/New()
+	..()
+	new /obj/item/weapon/grenade/chemical/xylyl_bromide(src)
+	new /obj/item/ammo_magazine/ak74(src)
+	new /obj/item/ammo_magazine/ak74(src)
+	new /obj/item/stack/medical/bruise_pack/gauze(src)
+
+/obj/item/weapon/storage/belt/smallpouches/green/sov_swat
+/obj/item/weapon/storage/belt/smallpouches/green/sov_swat/New()
+	storage_slots = 6
+	..()
+	new /obj/item/weapon/handcuffs(src)
+	new /obj/item/weapon/handcuffs(src)
+	new /obj/item/ammo_magazine/tt30(src)
+	new /obj/item/weapon/grenade/chemical/xylyl_bromide(src)
+	new /obj/item/weapon/grenade/chemical/xylyl_bromide(src)
+	new /obj/item/stack/medical/bruise_pack/gauze(src)
+
+/obj/item/weapon/storage/belt/smallpouches/green/sov_spz
+/obj/item/weapon/storage/belt/smallpouches/green/sov_spz/New()
+	..()
+	new /obj/item/weapon/grenade/antitank/rpg40(src)
+	new /obj/item/weapon/grenade/antitank/rpg40(src)
+	new /obj/item/weapon/grenade/chemical/xylyl_bromide(src)
+	new /obj/item/stack/medical/bruise_pack/gauze(src)
 
 /* Cold War Balaclavas*/
 
@@ -824,12 +887,22 @@
 	desc = "An olive drab coloured NBC hood, made protect against biological, chemical and nuclear threats."
 	icon_state = "nbc2"
 
+/obj/item/clothing/head/nbc/olive/fire
+	name = "firefighting hood"
+	desc = "A suit primarily intended to protect against fire."
+	armor = list(melee = 40, arrow = FALSE, gun = FALSE, energy = 80, bomb = 25, bio = 60, rad = 40)
+
 /obj/item/clothing/suit/nbc/olive
 	name = "olive drab NBC suit"
 	desc = "An olive drab coloured NBC suit, made protect against biological, chemical and nuclear threats."
 	icon_state = "nbc2"
 	item_state = "nbc2"
 	worn_state = "nbc2"
+
+/obj/item/clothing/suit/nbc/olive/fire
+	name = "firefighting suit"
+	desc = "A suit primarily intended to protect against fire."
+	armor = list(melee = 40, arrow = FALSE, gun = FALSE, energy = 80, bomb = 25, bio = 60, rad = 40)
 
 /obj/item/clothing/suit/hazmat
 	name = "hazmat suit"
@@ -1025,3 +1098,10 @@
 	heat_protection = UPPER_TORSO|LOWER_TORSO|LEG_LEFT|LEG_RIGHT|ARM_LEFT|ARM_RIGHT
 	armor = list(melee = 15, arrow = 5, gun = FALSE, energy = 15, bomb = 5, bio = 30, rad = 30)
 	value = 150
+
+/obj/item/clothing/under/ww2/soviet_nkvd/kgb
+	name = "KGB uniform"
+	desc = "A Russian KGB uniform, used by KGB."
+	icon_state = "nkvd_uni"
+	item_state = "nkvd_uni"
+	worn_state = "nkvd_uni"

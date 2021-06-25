@@ -186,12 +186,16 @@
 	desc = "A hat made of fur."
 	icon_state = "furhat_hat"
 	item_state = "furhat_hat"
+	cold_protection = HEAD
+	min_cold_protection_temperature = HELMET_MIN_COLD_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/head/furcap
 	name = "fur cap"
 	desc = "A cap made of fur."
 	icon_state = "furcap_hat"
 	item_state = "furcap_hat"
+	cold_protection = HEAD
+	min_cold_protection_temperature = HELMET_MIN_COLD_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/head/roundcap
 	name = "roundcap"
@@ -343,7 +347,10 @@
 	slot = "utility"
 	New()
 		..()
-		hold.can_hold = list(/obj/item/ammo_casing)
+		hold.can_hold = list(
+			/obj/item/ammo_casing,
+			/obj/item/stack/ammopart/stoneball
+			)
 
 /obj/item/clothing/accessory/storage/coinpouch
 	name = "coin pouch"
@@ -358,6 +365,27 @@
 	desc = "A personal wallet, where you can carry your coins and small objects."
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "wallet"
+
+
+/obj/item/clothing/accessory/storage/coinpouch/wallet/occinn
+	name = "Inn keyset"
+	desc = "A full set of keys for the Inn."
+	slot_flags = SLOT_ID | SLOT_BELT | SLOT_POCKET
+	New()
+		..()
+		hold.can_hold = list(
+		/obj/item/weapon/key
+		)
+/obj/item/clothing/accessory/storage/coinpouch/wallet/occinn/New()
+	..()
+	new /obj/item/weapon/key/civ/inn(src)
+	new /obj/item/weapon/key/civ/room1(src)
+	new /obj/item/weapon/key/civ/room2(src)
+	new /obj/item/weapon/key/civ/room3(src)
+	new /obj/item/weapon/key/civ/room4(src)
+
+
+
 
 /obj/item/clothing/accessory/storage/coinpouch/gator_wallet
 	name = "alligator scale wallet"
@@ -399,7 +427,7 @@
 			faction = owner.civilization
 			name = "[faction]'s passport"
 			desc = "[faction] passport, issued to [owner]. Can hold several visas."
-
+/*
 /obj/item/weapon/civilian_passport
 	name = "Identification Documents"
 	desc = "The identification papers of a civilian."
@@ -429,8 +457,7 @@
 				desc = "The identification papers of <b>[document_name]</b>."
 				var/crimereason = "Nationality"
 				if (istype(H.original_job, /datum/job/civilian/prisoner))
-					var/datum/job/civilian/prisoner/P = H.original_job
-					switch(P.nationality)
+					switch(H.nationality)
 						if ("German")
 							crimereason = "German Citizen."
 						if ("Ukrainian")
@@ -438,7 +465,7 @@
 						if ("Polish")
 							crimereason = "Polish Citizen."
 
-					document_details = list(H.h_style, P.original_hair, H.f_style, P.original_facial, crimereason, H.gender, rand(6,32),P.original_eyes, P.randrole)
+					document_details = list(H.h_style, H.f_style, crimereason, H.gender, rand(6,32))
 /obj/item/weapon/civilian_passport/examine(mob/user)
 	user << "<span class='info'>*---------*</span>"
 	..(user)
@@ -473,7 +500,7 @@
 /obj/item/weapon/civilian_passport/secondary_attack_self(mob/living/human/user)
 	showoff(user)
 	return
-
+*/
 /obj/item/weapon/visa
 	name = "visa"
 	desc = "a traveller visa."
